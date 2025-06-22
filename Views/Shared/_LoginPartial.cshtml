@@ -1,0 +1,93 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+	var user = UserManager.GetUserAsync(User).Result;
+}
+
+@if (User.IsInRole(SD.Role_Admin))
+{
+	<div class="mb-2 d-flex align-items-center mr-20">
+		@if (!string.IsNullOrEmpty(user?.AvatarUrl))
+		{
+			// Thay đổi ảnh admin
+			<img src="~/images/admin.png" alt="Avatar"
+				 class="rounded-circle shadow-sm me-2"
+				 style="width: 50px; height: 50px; object-fit: cover;" />
+		}
+		else
+		{
+			<img src="~/images/avatars/avatar.png" alt="Avatar"
+				 class="rounded-circle shadow-sm me-2"
+				 style="width: 50px; height: 50px; object-fit: cover;" />
+		}
+		<span class="fw-semibold text-black">@user?.FullName</span>
+		<li class="nav-item mr-20">
+			<form id="logoutForm" asp-area="Identity" asp-page="/Account/Logout"
+				  asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" class="d-inline">
+				<button id="logout" type="submit" class="btn btn-outline-secondary fw-semibold" style="width:150px; margin-top: -15px;">
+					<i class="fas fa-sign-out-alt me-1"></i> Đăng xuất
+				</button>
+			</form>
+		</li>
+	</div>
+}
+else
+{
+	<nav class="py-3">
+		<div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+			<ul class="navbar-nav align-items-center d-flex justify-content-center">
+				@if (SignInManager.IsSignedIn(User))
+				{
+					<li class="nav-item dropdown me-3 d-flex align-items-center">
+						@if (!string.IsNullOrEmpty(user?.AvatarUrl))
+						{
+							<img src="@user.AvatarUrl" alt="Avatar" class="rounded-circle me-2 avatar-img" style="width: 30px; height: 30px;" />
+						}
+						<a class="nav-link dropdown-toggle fw-semibold text-secondary" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+							@user?.FullName
+						</a>	
+						<ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="userDropdown">
+							<li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">Hồ sơ</a></li>
+								<li>
+									<a href="/Payment/Cart" class="dropdown-item text-black mr-65">
+										Giỏ Hàng
+									</a>
+							</li>
+							<li>
+								<a href="/Order/History" class="dropdown-item text-black mr-65">
+									Lịch Sử Đơn Hàng
+								</a>
+							</li>
+						</ul>
+					</li>
+					<li class="nav-item">
+						<form id="logoutForm" asp-area="Identity" asp-page="/Account/Logout"
+							  asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" class="d-inline">
+							<button id="logout" type="submit" class="btn btn-outline-secondary fw-semibold" style="width:150px;">
+								<i class="fas fa-sign-out-alt me-1"></i> Đăng xuất
+							</button>
+						</form>
+					</li>
+				}
+				else
+				{
+					<div class="d-flex justify-content-center">
+
+					<li class="nav-item me-2">
+						<a class="btn btn-outline-secondary fw-semibold" asp-area="Identity" asp-page="/Account/Register">
+							<i class="fas fa-user-plus me-1"></i> Đăng ký
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="btn btn-secondary fw-semibold" asp-area="Identity" asp-page="/Account/Login">
+							<i class="fas fa-sign-in-alt me-1"></i> Đăng nhập
+						</a>
+					</li>
+			</div>
+				}
+		</ul>
+		</div>
+	</nav>
+}

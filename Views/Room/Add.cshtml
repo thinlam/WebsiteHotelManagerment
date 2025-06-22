@@ -1,0 +1,71 @@
+﻿@model WebsiteHotelManagerment.Models.ChiTietPhong
+
+<div class="pl-260">
+	<h3>Thêm Phòng</h3>
+
+	<div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+	<form asp-action="Add" method="post" enctype="multipart/form-data">
+		<div class="mb-3">
+			<label>Tên phòng</label>
+			<input asp-for="TenPhong" class="form-control" />
+			<span asp-validation-for="TenPhong" class="text-danger"></span>
+		</div>
+
+		<div class="mb-3">
+			<label>Mô tả</label>
+			<textarea asp-for="MoTa" class="form-control"></textarea>
+		</div>
+
+		<div class="mb-3">
+			<label>Tiện nghi (ngăn cách bằng dấu phẩy)</label>
+			<input asp-for="TienNghi" class="form-control" placeholder="Wifi, Bồn tắm, Điều hòa, ..." />
+		</div>
+
+		<div class="mb-3">
+			<label>Số người lớn</label>
+			<input asp-for="SoNguoiLon" class="form-control" type="number" />
+		</div>
+
+		<div class="mb-3">
+			<label>Số trẻ em</label>
+			<input asp-for="SoTreEm" class="form-control" type="number" />
+		</div>
+
+		<div class="mb-3">
+			<label>Diện tích (m²)</label>
+			<input asp-for="DienTich" class="form-control" type="number" />
+		</div>
+
+		<div class="mb-3">
+			<label>Giá mỗi đêm</label>
+			<input asp-for="GiaMoiDem" class="form-control" type="number" step="0.01" />
+		</div>
+
+		<div class="mb-3">
+			<label>Phân loại phòng</label>
+			<select asp-for="PhanLoai" asp-items="ViewBag.LoaiPhongList" class="form-control">
+				<option value="">-- Chọn loại phòng --</option>
+			</select>
+			<span asp-validation-for="PhanLoai" class="text-danger"></span>
+		</div>
+
+		<div class="mb-3">
+			<label>Ảnh phòng <span class="text-danger">*</span></label>
+			<input type="file" name="fileAnh" class="form-control" />
+			@Html.ValidationMessage("fileAnh", null, new { @class = "text-danger" })
+		</div>
+
+		<div class="mb-3">
+			<label>Caption ảnh</label>
+			<input asp-for="TieuDeAnh" class="form-control" />
+		</div>
+
+		<button type="submit" class="btn btn-primary">Lưu</button>
+		<a href="@Url.Action("Index", "Room")" class="btn btn-secondary">Hủy</a>
+	</form>
+</div>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}

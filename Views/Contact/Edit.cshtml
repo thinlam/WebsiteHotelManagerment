@@ -1,0 +1,42 @@
+﻿@model WebsiteHotelManagerment.Models.LienHe
+@{
+    ViewData["Title"] = "Chỉnh sửa liên hệ";
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+<section class="px-60 pl-260">
+    <h4 class="mb-4 fw-bold">Chỉnh sửa liên hệ</h4>
+
+    <form method="post" asp-action="Edit">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="mb-3">
+            <label asp-for="HoTen" class="form-label"></label>
+            <input asp-for="HoTen" class="form-control border-0 border-bottom rounded-0" />
+            <span asp-validation-for="HoTen" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label"></label>
+            <input asp-for="Email" class="form-control border-0 border-bottom rounded-0" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="NoiDung" class="form-label"></label>
+            <textarea asp-for="NoiDung" class="form-control border-0 border-bottom rounded-0" rows="4"></textarea>
+            <span asp-validation-for="NoiDung" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary fw-bold">Lưu thay đổi</button>
+        <a asp-action="Index" class="btn btn-secondary ms-2">Quay lại</a>
+    </form>
+</section>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

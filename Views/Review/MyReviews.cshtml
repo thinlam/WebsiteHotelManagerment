@@ -1,0 +1,108 @@
+﻿@model IEnumerable<WebsiteHotelManagerment.Models.Review>
+
+@{
+    ViewData["Title"] = "Đánh giá của tôi";
+}
+
+<section class="bread-crumb mt-115">
+    <div class="px-60">
+        <ul class="breadcrumb">
+            <li class="home">
+                <a class="text-black" asp-controller="Home" asp-action="Index" title="Trang chủ" style="text-decoration: none"><span>Trang chủ</span></a>
+                <i class="fa-solid fa-chevron-right"></i>
+            </li>
+            <li><strong><span>Đánh Giá của bạn</span></strong></li>
+        </ul>
+    </div>
+</section>
+
+<div class="container mt-5 mb-5">
+    <h2 class="text-center text-primary mb-4">Đánh giá bạn đã gửi</h2>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-warning text-center">
+            @TempData["Error"]
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center">
+            Bạn chưa có đánh giá nào.
+        </div>
+    }
+
+    @foreach (var item in Model)
+    {
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <form asp-action="EditReview" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="Id" value="@item.Id" />
+
+                    <!-- Loại đánh giá -->
+                    <p>
+                        <strong>Loại đánh giá:</strong>
+                        @if (item.ReviewType == "Dịch vụ")
+                        {
+                            <span class="badge bg-success">Dịch vụ</span>
+                        }
+                        else if (item.ReviewType == "Đặt phòng")
+                        {
+                            <span class="badge bg-primary">Đặt phòng</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Không rõ</span>
+                        }
+                    </p>
+
+                    <!-- Số sao -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Số sao:</label>
+                        <select name="Rating" class="form-select" required>
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                <option value="@i" selected="@(item.Rating == i)">
+                                    @i sao
+                                </option>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Nội dung -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nội dung đánh giá:</label>
+                        <textarea name="Content" class="form-control" rows="4" required>@item.Content</textarea>
+                    </div>
+
+                    <!-- Ảnh hiện tại -->
+                    @if (!string.IsNullOrEmpty(item.ImagePath))
+                    {
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Hình ảnh hiện tại:</label><br />
+                            <img src="@Url.Content(item.ImagePath)" class="img-thumbnail" style="max-width: 250px;" />
+                        </div>
+                    }
+
+                    <!-- Ảnh mới -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Cập nhật hình ảnh mới (nếu có):</label>
+                        <input type="file" name="NewImage" class="form-control" accept="image/*" />
+                    </div>
+
+                    <!-- Phản hồi từ quản trị -->
+                    @if (!string.IsNullOrEmpty(item.AdminReply))
+                    {
+                        <div class="alert alert-info">
+                            <strong>Phản hồi từ quản trị:</strong> @item.AdminReply
+                        </div>
+                    }
+
+                    <!-- Nút -->
+                    <button type="submit" class="btn btn-primary">Cập nhật đánh giá của bạn</button>
+                </form>
+            </div>
+        </div>
+    }
+</div>

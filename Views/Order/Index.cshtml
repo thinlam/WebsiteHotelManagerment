@@ -1,0 +1,45 @@
+﻿@model List<WebsiteHotelManagerment.Models.Order>
+@using WebsiteHotelManagerment.Models
+
+<div class="pl-260">
+	<h2 class="text-center">Quản lý đơn đặt phòng</h3>
+
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th>Khách hàng</th>
+				<th>Phòng</th>
+				<th>Ngày nhận</th>
+				<th>Ngày trả</th>
+				<th>Tổng tiền</th>
+				<th>Trạng thái</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var order in Model)
+			{
+				<tr>
+					<td>@order.FullName</td>
+					<td>@order.ChiTietPhong.TenPhong</td>
+					<td>@order.NgayNhan.ToString("dd/MM/yyyy")</td>
+					<td>@order.NgayTra.ToString("dd/MM/yyyy")</td>
+					<td>@order.TongTien.ToString("N0") đ</td>
+					<td>
+						<form asp-action="UpdateStatus" method="post">
+							<input type="hidden" name="id" value="@order.Id" />
+							<select name="trangThai" class="form-control">
+								@foreach (TrangThaiDonHang tt in Enum.GetValues(typeof(TrangThaiDonHang)))
+								{
+									var selected = ((TrangThaiDonHang)order.TrangThai == tt) ? "selected" : "";
+									<option value="@((int)tt)" selected>@tt.ToString()</option>
+								}
+							</select>
+							<button type="submit" class="btn btn-sm btn-primary mt-1">Cập nhật</button>
+						</form>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+
+</div>

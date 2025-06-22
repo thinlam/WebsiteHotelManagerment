@@ -1,0 +1,38 @@
+﻿@model List<WebsiteHotelManagerment.Models.Order>
+@{
+    ViewData["Title"] = "Lịch sử đặt phòng";
+}
+
+<div class="px-60 mt-115">
+    <h3 style="margin-top: 200px;">Lịch sử đặt phòng</h3>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success">@TempData["Message"]</div>
+    }
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Phòng</th>
+                <th>Ngày nhận</th>
+                <th>Ngày trả</th>
+                <th>Tổng tiền</th>
+                <th>Trạng thái</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>@order.ChiTietPhong.TenPhong</td>
+                    <td>@order.NgayNhan.ToString("dd/MM/yyyy")</td>
+                    <td>@order.NgayTra.ToString("dd/MM/yyyy")</td>
+                    <td>@order.TongTien.ToString("N0") đ</td>
+                    <td>@order.TrangThai.GetDisplayName()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>

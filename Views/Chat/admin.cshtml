@@ -1,0 +1,145 @@
+﻿@model Tuple<List<WebsiteHotelManagerment.Models.ApplicationUser>, List<WebsiteHotelManagerment.Models.Message>>
+
+@{
+    ViewData["Title"] = "Chat với khách hàng";
+    var users = Model.Item1;
+    var messages = Model.Item2;
+}
+
+<div class= pl-260>
+    <h2 class="text-center mb-4">Đánh giá của khách hàng</h2>
+
+    <div class="row h-100">
+        <!-- Sidebar danh sách user -->
+        <div class="col-3 border-end d-flex flex-column h-100 overflow-auto">
+            <h5 class="p-3 border-bottom">Danh sách khách hàng</h5>
+            @if (!users.Any())
+            {
+                <div class="alert alert-info m-3">Chưa có cuộc trò chuyện nào.</div>
+            }
+            else
+            {
+                <ul class="list-group list-group-flush flex-grow-1">
+                    @foreach (var user in users)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center user-item" data-userid="@user.Id" style="cursor: pointer;">
+                            <div>
+                                <strong>@user.UserName</strong><br />
+                                <small class="text-muted">@user.Email</small>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+
+        <!-- Khu vực chat -->
+        <div class="col-9 d-flex flex-column h-100">
+            <div class="border-bottom p-3" id="chatHeader">
+                <h5>Chọn khách hàng để bắt đầu chat</h5>
+            </div>
+            <div id="chatBox" class="flex-grow-1 overflow-auto p-3 bg-light" style="font-size:14px;">
+                <p class="text-center text-muted">Chưa có tin nhắn</p>
+            </div>
+
+            <form id="chatForm" class="p-3 border-top d-flex gap-2" style="display:none;">
+                <textarea id="chatInput" rows="2" class="form-control" placeholder="Nhập tin nhắn..." required></textarea>
+                <button type="submit" class="btn btn-primary">Gửi</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        let selectedUserId = null;
+
+        $('.user-item').click(function () {
+            selectedUserId = $(this).data('userid');
+
+            // Cập nhật header
+            $('#chatHeader').html('<h5>Chat với: ' + $(this).find('strong').text() + '</h5>');
+
+            // Hiện form chat
+            $('#chatForm').show();
+
+            // Load tin nhắn qua AJAX
+            loadMessages(selectedUserId);
+        });
+
+        function loadMessages(userId) {
+            $.ajax({
+                url: '@Url.Action("GetMessagesWithUser", "Chat")',
+                data: { userId: userId },
+                success: function (data) {
+                    let chatBox = $('#chatBox');
+                    chatBox.empty();
+
+                    if (!data || data.length === 0) {
+                        chatBox.html('<p class="text-center text-muted">Chưa có tin nhắn</p>');
+                        return;
+                    }
+
+                    data.forEach(msg => {
+                        let currentUserId = '@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value';
+                        let alignClass = msg.senderId === currentUserId ? 'text-end' : 'text-start';
+                        let bgClass = msg.senderId === currentUserId ? 'btn-primary text-white' : 'bg-light text-dark';
+
+                        chatBox.append(`
+                            <div class="${alignClass} mb-2">
+                                <span class="${bgClass} d-inline-block rounded-pill px-3 py-2" style="max-width: 70%;">
+                                    ${msg.content}
+                                </span><br/>
+                                <small class="text-muted">${msg.timestamp}</small>
+                            </div>`);
+                    });
+
+                    chatBox.scrollTop(chatBox[0].scrollHeight);
+                },
+                error: function () {
+                    alert('Lỗi tải tin nhắn');
+                }
+            });
+        }
+
+        $('#chatForm').submit(function (e) {
+            e.preventDefault();
+
+            if (!selectedUserId) {
+                alert('Vui lòng chọn khách hàng để chat');
+                return;
+            }
+
+            let content = $('#chatInput').val().trim();
+            if (!content) return;
+
+            $.ajax({
+                url: '@Url.Action("SendMessageToUser", "Chat")',
+                method: 'POST',
+                data: { receiverId: selectedUserId, content: content },
+                success: function (res) {
+                    if (res.success) {
+                        let chatBox = $('#chatBox');
+                        chatBox.append(`
+                            <div class="text-end mb-2">
+                                <span class="btn-primary text-white d-inline-block rounded-pill px-3 py-2" style="max-width: 70%;">
+                                    ${res.message.content}
+                                </span><br/>
+                                <small class="text-muted">${res.message.timestamp}</small>
+                            </div>`);
+                        chatBox.scrollTop(chatBox[0].scrollHeight);
+                        $('#chatInput').val('');
+                    } else {
+                        alert('Gửi tin nhắn thất bại: ' + res.message);
+                    }
+                },
+                error: function () {
+                    alert('Lỗi gửi tin nhắn');
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,41 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+}
+
+<div class="d-flex justify-content-center pb-4 mt-115">
+    <div class="login-container pt-5">
+        <h2 class="text-center font-bold">Đăng Nhập</h2>
+        <form id="account" method="post" style="width: 500px;">
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Email" class="form-control" placeholder="Email" autocomplete="username" />
+                <label asp-for="Input.Email">Email</label>
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Password" type="password" class="form-control" placeholder="Password" autocomplete="current-password" />
+                <label asp-for="Input.Password">Mật khẩu</label>
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+
+            <div class="checkbox mb-3">
+                <label>
+                    <input class="form-check-input" asp-for="Input.RememberMe" />
+                    @Html.DisplayNameFor(m => m.Input.RememberMe)
+                </label>
+            </div>
+
+            <button type="submit" class="w-100 btn btn-lg btn-secondary">Đăng nhập</button>
+
+            <div class="auth-links mt-4 text-center">
+                <p><a asp-page="./ForgotPassword">Quên mật khẩu?</a></p>
+                <p><a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Tạo tài khoản mới</a></p>
+            </div>
+        </form>
+    </div>
+</div>

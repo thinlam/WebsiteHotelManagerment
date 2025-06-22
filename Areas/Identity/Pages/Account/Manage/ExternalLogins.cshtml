@@ -1,0 +1,63 @@
+﻿@inject SignInManager<ApplicationUser> SignInManager
+@{
+	var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+}
+
+<style>
+	.account-management {
+		background-color: #333;
+		border-radius: 8px;
+		max-width: 300px;
+		margin: auto;
+	}
+
+	.nav-pills .nav-link {
+		color: #fff;
+		background-color: #444;
+		border-radius: 6px;
+		padding: 10px 20px;
+		transition: background-color 0.3s;
+	}
+
+		.nav-pills .nav-link:hover {
+			background-color: #555;
+		}
+
+		.nav-pills .nav-link.active {
+			background-color: #007bff;
+			color: #fff;
+		}
+
+	.nav-item .fas {
+		margin-right: 8px;
+	}
+
+</style>
+
+<div class="account-management py-4">
+	<ul class="nav nav-pills flex-column d-flex justify-content-center align-items-center">
+		<li class="nav-item mb-2">
+			<a class="nav-link @ManageNavPages.IndexNavClass(ViewContext) text-light" id="profile" asp-page="./Index">
+				<i class="fas fa-user-circle me-2"></i> Hồ Sơ
+			</a>
+		</li>
+		<li class="nav-item mb-2">
+			<a class="nav-link @ManageNavPages.EmailNavClass(ViewContext) text-light" id="email" asp-page="./Email">
+				<i class="fas fa-envelope me-2"></i> Email
+			</a>
+		</li>
+		<li class="nav-item mb-2">
+			<a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext) text-light" id="change-password" asp-page="./ChangePassword">
+				<i class="fas fa-key me-2"></i> Đổi Mật Khẩu
+			</a>
+		</li>
+		@if (hasExternalLogins)
+		{
+			<li class="nav-item mb-2">
+				<a class="nav-link @ManageNavPages.ExternalLoginsNavClass(ViewContext) text-light" id="external-login" asp-page="./ExternalLogins">
+					<i class="fas fa-external-link-alt me-2"></i> Đăng Nhập Ngoài
+				</a>
+			</li>
+		}
+	</ul>
+</div>

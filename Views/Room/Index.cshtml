@@ -1,0 +1,270 @@
+﻿@model List<WebsiteHotelManagerment.Models.ChiTietPhong>
+@{
+	var loaiPhongList = ViewBag.LoaiPhongList as List<SelectListItem>;
+	var selectedRoomTypes = ViewBag.SelectedRoomTypes as List<string> ?? new List<string>();
+}
+
+@{
+	ViewData["Title"] = "Phòng";
+}
+
+<style>
+	.room-card {
+		border-radius: 16px;
+		box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+		overflow: hidden;
+		transition: all 0.3s ease;
+		background: white;
+	}
+
+		.room-card:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+		}
+
+		.room-card img {
+			width: 100%;
+			height: 200px;
+			object-fit: cover;
+		}
+</style>
+
+@if (User.IsInRole(SD.Role_Admin))
+{
+	<section class="bread-crumb">
+		<div class="row pl-260">
+			<!-- Bộ lọc nằm ngang -->
+			<div class="col-12 mb-4">
+				<form method="get" class="bg-light p-3 rounded shadow-sm">
+					<div class="row align-items-end">
+						<!-- Tên phòng -->
+						<div class="col-md-3">
+							<label for="keyword" class="form-label fw-semibold">Tên phòng</label>
+							<input type="text" name="keyword" id="keyword" class="form-control"
+								   value="@ViewBag.Keyword" placeholder="Nhập tên...">
+						</div>
+
+						<!-- Loại phòng -->
+						<div class="col-md-4">
+							<label class="form-label fw-semibold">Loại phòng</label>
+							<div class="d-flex flex-wrap">
+								@foreach (var item in loaiPhongList)
+								{
+									bool isChecked = selectedRoomTypes.Contains(item.Value);
+									<div class="form-check me-3">
+										<input class="form-check-input" type="checkbox" name="roomTypes" value="@item.Value" id="lp_@item.Value"
+										@(isChecked ? "checked" : "") />
+										<label class="form-check-label" for="lp_@item.Value">@item.Text</label>
+									</div>
+								}
+							</div>
+						</div>
+
+						<!-- Mức giá -->
+						<div class="col-md-3">
+							<label class="form-label fw-semibold">Mức giá (≤)</label>
+							<div class="d-flex flex-wrap">
+								@foreach (var price in new[] { 500000, 1000000, 2000000 })
+								{
+									bool isChecked = ViewBag.SelectedPrices != null && ((List<int>)ViewBag.SelectedPrices).Contains(price);
+									<div class="form-check me-3">
+										<input class="form-check-input" type="checkbox" name="prices" value="@price" id="gia@price"
+										@(isChecked ? "checked" : "")>
+										<label class="form-check-label" for="gia@price">@price.ToString("N0")</label>
+									</div>
+								}
+							</div>
+						</div>
+
+						<!-- Nút lọc -->
+						<div class="col-md-2">
+							<a href="/Room/Add" class="text-white btn btn-primary py-2" style="width: 118px; text-decoration: none;">Thêm Phòng</a>
+							<button type="submit" class="btn mt-2 btn-primary px-3 py-2">Lọc kết quả</button>
+						</div>
+					</div>
+				</form>
+			</div>
+
+			<!-- Danh sách phòng theo dạng bảng -->
+			<div class="col-12">
+				@if (Model.Count == 0)
+				{
+					<div class="alert alert-warning text-center">Không có phòng nào phù hợp.</div>
+				}
+				else
+				{
+					<div class="table-responsive shadow-sm rounded overflow-hidden">
+						<table class="table table-bordered table-striped align-middle mb-0">
+							<thead class="table-light text-center">
+								<tr>
+									<th style="width: 100px;">Ảnh</th>
+									<th>Tên phòng</th>
+									<th>Sức chứa</th>
+									<th>Diện tích</th>
+									<th>Giá / Đêm</th>
+									<th>Hành động</th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach (var room in Model)
+								{
+									<tr>
+										<td class="text-center">
+											<img src="~/images/room/@room.TenFileAnh" alt="@room.TieuDeAnh" style="width: 80px; height: 60px; object-fit: cover;" />
+										</td>
+										<td>@room.TenPhong</td>
+										<td class="text-center">@room.SoNguoiLon khách</td>
+										<td class="text-center">@room.DienTich m²</td>
+										<td class="text-danger fw-bold text-center">@room.GiaMoiDem.ToString("N0") VNĐ</td>
+										<td class="text-center">
+											<a class="btn btn-info btn-sm me-1" href="@Url.Action("Detail", "Room", new { id = room.Id })">Xem</a>
+											<a class="btn btn-warning btn-sm me-1" href="@Url.Action("Edit", "Room", new { id = room.Id })">Sửa</a>
+											<a class="btn btn-danger btn-sm" href="@Url.Action("Delete", "Room", new { id = room.Id })">Xoá</a>
+										</td>
+									</tr>
+								}
+							</tbody>
+						</table>
+					</div>
+				}
+			</div>
+		</div>
+		@if (ViewBag.TotalPages > 1)
+		{
+			<nav class="d-flex justify-content-center mt-4">
+				<ul class="pagination">
+					@{
+						int currentPage = ViewBag.CurrentPage;
+						int totalPages = ViewBag.TotalPages;
+						string urlBase = Url.Action("Index", "Room");
+
+						for (int i = 1; i <= totalPages; i++)
+						{
+							var liClass = i == currentPage ? "page-item active" : "page-item";
+							<li class="@liClass">
+								<a class="page-link" href="@Url.Action("Index", new { page = i, keyword = ViewBag.Keyword, roomTypes = ViewBag.SelectedRoomTypes, prices = ViewBag.SelectedPrices })">@i</a>
+							</li>
+						}
+					}
+				</ul>
+			</nav>
+		}
+	</section>
+}
+else
+{
+	<section class="bread-crumb mt-115">
+		<div class="px-60">
+			<ul class="breadcrumb">
+				<li class="home">
+					<a class="text-black" asp-controller="Home" asp-action="Index" title="Trang chủ" style="text-decoration: none"><span>Trang chủ</span></a>
+					<i class="fa-solid fa-chevron-right"></i>
+				</li>
+				<li><strong><span>Phòng</span></strong></li>
+			</ul>
+		</div>
+
+		<div class="row px-60">
+			<!-- Bộ lọc -->
+			<div class="col-md-3">
+				<form method="get" class="bg-light p-4 rounded shadow-sm">
+					<div class="mb-4">
+						<label for="keyword" class="form-label fw-semibold">Tên phòng</label>
+						<input type="text" name="keyword" id="keyword" class="form-control"
+							   value="@ViewBag.Keyword" placeholder="Nhập tên...">
+					</div>
+
+					<div class="mb-4">
+						<label class="form-label fw-semibold">Loại phòng</label>
+						@foreach (var item in loaiPhongList)
+						{
+							bool isChecked = selectedRoomTypes.Contains(item.Value);
+							<div class="form-check d-flex align-items-center">
+								<input class="form-check-input me-2" type="checkbox" name="roomTypes" value="@item.Value" id="lp_@item.Value"
+								@(isChecked ? "checked" : "") />
+								<label class="form-check-label mb-0" for="lp_@item.Value">@item.Text</label>
+							</div>
+						}
+					</div>
+
+					<div class="mb-4">
+						<label class="form-label fw-semibold">Mức giá (dưới hoặc bằng)</label>
+						@foreach (var price in new[] { 500000, 1000000, 2000000 })
+						{
+							bool isChecked = ViewBag.SelectedPrices != null && ((List<int>)ViewBag.SelectedPrices).Contains(price);
+							<div class="form-check d-flex align-items-center">
+								<input class="form-check-input me-2" type="checkbox" name="prices" value="@price" id="gia@price"
+								@(isChecked ? "checked" : "")>
+								<label class="form-check-label mb-0" for="gia@price">@price.ToString("N0") VNĐ</label>
+							</div>
+						}
+					</div>
+					<button type="submit" class="btn btn-primary w-100 mb-2 mt-4">Lọc kết quả</button>
+				</form>
+			</div>
+
+			<!-- Danh sách phòng -->
+			<div class="col-md-9 mb-4">
+				<div class="row">
+					@if (Model.Count == 0)
+					{
+						<div class="col-12">
+							<div class="alert alert-warning text-center">Không có phòng nào phù hợp.</div>
+						</div>
+					}
+					else
+					{
+						foreach (var room in Model)
+						{
+							<div class="col-md-4 mb-4">
+								<div class="card h-100 shadow-sm border-0">
+									<img src="~/images/room/@room.TenFileAnh" class="card-img-top" alt="@room.TieuDeAnh" style="height: 180px;" />
+
+									<div class="card-body text-center">
+										<h6 class="card-title fw-bold text-uppercase">@room.TenPhong</h6>
+
+										<div class="my-2 d-flex justify-content-center gap-3 text-muted fs-5">
+											<i class="fa-solid fa-mug-hot"></i>
+											<i class="fa-solid fa-bath"></i>
+											<i class="fa-solid fa-wifi"></i>
+										</div>
+
+										<div class="d-flex justify-content-center gap-3 small text-secondary">
+											<div><strong>@room.SoNguoiLon</strong> Khách</div>
+											<div><strong>@room.DienTich</strong>m²</div>
+										</div>
+									</div>
+
+									<div class="card-footer bg-white border-0 text-center">
+										<p class="text-danger fw-bold fs-5 mb-2">@room.GiaMoiDem.ToString("N0") VNĐ/Đêm</p>
+										<a class="btn btn-info btn-sm" href="@Url.Action("Detail", "Room", new { id = room.Id })">Xem</a>
+									</div>
+								</div>
+							</div>
+						}
+					}
+				</div>
+			</div>
+		</div>
+		@if (ViewBag.TotalPages > 1)
+		{
+			<nav class="d-flex justify-content-center mt-4">
+				<ul class="pagination">
+					@{
+						int currentPage = ViewBag.CurrentPage;
+						int totalPages = ViewBag.TotalPages;
+						string urlBase = Url.Action("Index", "Room");
+
+						for (int i = 1; i <= totalPages; i++)
+						{
+							var liClass = i == currentPage ? "page-item active" : "page-item";
+							<li class="@liClass">
+								<a class="page-link" href="@Url.Action("Index", new { page = i, keyword = ViewBag.Keyword, roomTypes = ViewBag.SelectedRoomTypes, prices = ViewBag.SelectedPrices })">@i</a>
+							</li>
+						}
+					}
+				</ul>
+			</nav>
+		}
+	</section>
+}

@@ -1,0 +1,222 @@
+﻿@model WebsiteHotelManagerment.Models.Review
+@using Newtonsoft.Json
+
+@{
+    ViewData["Title"] = "Gửi đánh giá dịch vụ";
+    var allReviews = ViewData["AllReviews"] as List<WebsiteHotelManagerment.Models.Review>;
+    var hasReviewed = ViewData["HasReviewed"] != null && (bool)ViewData["HasReviewed"];
+
+    var selectedFilter = Context.Request.Query["filter"];
+    var filteredReviews = allReviews;
+
+    if (selectedFilter == "service")
+    {
+        filteredReviews = allReviews.Where(r => r.ReviewType == "Dịch vụ").ToList();
+    }
+    else if (selectedFilter == "room")
+    {
+        filteredReviews = allReviews.Where(r => r.ReviewType == "Đặt phòng").ToList();
+    }
+
+    var visibleCount = 3;
+    var showViewMore = filteredReviews.Count > visibleCount;
+    var displayedReviews = filteredReviews.Take(visibleCount).ToList();
+}
+
+<section class="bread-crumb mt-115">
+    <div class="px-60">
+        <ul class="breadcrumb">
+            <li class="home">
+                <a class="text-black" asp-controller="Home" asp-action="Index" title="Trang chủ">
+                    <span>Trang chủ</span>
+                </a>
+                <i class="fa-solid fa-chevron-right"></i>
+            </li>
+            <li><strong><span>Đánh Giá</span></strong></li>
+        </ul>
+    </div>
+</section>
+
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success text-center">@TempData["Success"]</div>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-warning text-center">@TempData["Error"]</div>
+            }
+
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0 text-center">Gửi đánh giá của bạn</h4>
+                </div>
+                <div class="card-body bg-light">
+                    @if (hasReviewed)
+                    {
+                        <div class="alert alert-info text-center fw-bold">Bạn đã gửi đánh giá trước đó. Cảm ơn bạn!</div>
+                    }
+                    else
+                    {
+                        <form asp-action="Create" method="post" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Bạn muốn đánh giá:</label><br />
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="ReviewType" value="Dịch vụ" checked />
+                                    <label class="form-check-label">Dịch vụ</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="ReviewType" value="Đặt phòng" />
+                                    <label class="form-check-label">Đặt phòng</label>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Chấm điểm:</label><br />
+                                <div class="d-flex gap-2">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="Rating" value="@i" required />
+                                            <label class="form-check-label">@i ⭐</label>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="Content" class="form-label fw-bold">Nội dung đánh giá</label>
+                                <textarea asp-for="Content" class="form-control" rows="5" placeholder="Bạn cảm thấy dịch vụ như thế nào?"></textarea>
+                                <span asp-validation-for="Content" class="text-danger"></span>
+                            </div>
+
+                            <input type="file" name="image" class="form-control" accept="image/*" onchange="previewImage(event)" />
+                            <div class="mt-3">
+                                <img id="preview" src="#" alt="Xem trước ảnh" style="display: none;" class="img-thumbnail review-img" />
+                            </div>
+
+                            <button type="submit" class="btn btn-success w-100 mt-3">Gửi đánh giá</button>
+                        </form>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr class="my-5" />
+<div class="container">
+    <h3 class="text-center mb-4">Các đánh giá của khách hàng</h3>
+
+    <div class="text-center mb-4">
+        <a class="btn btn-outline-primary me-2 @(selectedFilter == "" ? "active" : "")" href="?filter=">Tất cả</a>
+        <a class="btn btn-outline-success me-2 @(selectedFilter == "service" ? "active" : "")" href="?filter=service">Dịch vụ</a>
+        <a class="btn btn-outline-primary @(selectedFilter == "room" ? "active" : "")" href="?filter=room">Đặt phòng</a>
+    </div>
+
+    <div id="review-list">
+        @foreach (var item in displayedReviews)
+        {
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            @if (!string.IsNullOrEmpty(item.ImagePath))
+                            {
+                                <img src="@Url.Content(item.ImagePath)" class="img-fluid review-img border" />
+                            }
+                            else
+                            {
+                                <div class="text-muted">[Không có ảnh]</div>
+                            }
+                        </div>
+
+                        <div class="col-md-9">
+                            <h5 class="text-warning">⭐ @item.Rating / 5</h5>
+                            <p>
+                                <strong>Đã đánh giá:</strong>
+                                <span class="badge @(item.ReviewType == "Dịch vụ" ? "bg-success" : "bg-primary")">@item.ReviewType</span>
+                            </p>
+                            <p>@item.Content</p>
+                            <p class="text-muted">Gửi bởi: <b>@(item.User?.FullName ?? "Khách")</b> vào @item.CreatedAt.ToString("dd/MM/yyyy")</p>
+                            @if (!string.IsNullOrEmpty(item.AdminReply))
+                            {
+                                <div class="alert alert-info mt-2">
+                                    <strong>Phản hồi từ quản trị:</strong><br />
+                                    @item.AdminReply
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (showViewMore)
+    {
+        <div class="text-center">
+            <a class="btn btn-secondary" href="#" id="view-more-btn">Xem thêm đánh giá</a>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        function previewImage(event) {
+            const [file] = event.target.files;
+            const preview = document.getElementById('preview');
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                preview.style.display = 'block';
+            }
+        }
+
+        const allReviews = @Html.Raw(JsonConvert.SerializeObject(filteredReviews));
+        let visibleCount = @visibleCount;
+
+        document.getElementById("view-more-btn")?.addEventListener("click", function (e) {
+            e.preventDefault();
+            visibleCount += 3;
+            const container = document.getElementById("review-list");
+            container.innerHTML = "";
+
+            for (let i = 0; i < Math.min(visibleCount, allReviews.length); i++) {
+                const item = allReviews[i];
+                container.innerHTML += `
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                ${item.imagePath ? `<img src="${item.imagePath}" class="img-fluid review-img border" />` : `<div class="text-muted">[Không có ảnh]</div>`}
+                            </div>
+                            <div class="col-md-9">
+                                <h5 class="text-warning">⭐ ${item.rating} / 5</h5>
+                                <p><strong>Đã đánh giá:</strong> <span class="badge ${item.reviewType === "Dịch vụ" ? "bg-success" : "bg-primary"}">${item.reviewType}</span></p>
+                                <p>${item.content}</p>
+                                <p class="text-muted">Gửi bởi: <b>${item.user?.fullName ?? "Khách"}</b> vào ${new Date(item.createdAt).toLocaleDateString("vi-VN")}</p>
+                                ${item.adminReply ? `<div class="alert alert-info mt-2"><strong>Phản hồi từ quản trị:</strong><br />${item.adminReply}</div>` : ""}
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            }
+
+            if (visibleCount >= allReviews.length) {
+                this.remove();
+            }
+        });
+    </script>
+}
+
+<style>
+    .review-img {
+        max-height: 300px;
+        width: 100%;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+</style>

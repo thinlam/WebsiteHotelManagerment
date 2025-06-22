@@ -1,0 +1,256 @@
+﻿@model WebsiteHotelManagerment.Models.ChiTietPhong
+@{
+	ViewBag.Title = "Phòng đơn view thành phố";
+}
+
+<style>
+	.gold-border {
+		border: 2px solid #f5e9cd;
+		background-color: #fffdf8;
+	}
+
+	.gold-btn {
+		background-color: #d4a949;
+		color: white;
+		border: none;
+	}
+
+		.gold-btn:hover {
+			background-color: #c2983b;
+		}
+
+	.border-light-yellow {
+		border: 1px solid #f5e9cd;
+	}
+
+	.section-title {
+		color: #333;
+		font-weight: 600;
+	}
+
+	.service-icon {
+		color: #d4a949;
+		margin-right: 5px;
+	}
+
+	.tab-button {
+		padding: 8px 16px;
+		background-color: #f5e9cd;
+		border: 1px solid #d4a949;
+		color: #000;
+		font-weight: bold;
+		border-bottom: none;
+		cursor: pointer;
+		margin-right: 5px;
+	}
+
+		.tab-button.active {
+			background-color: #d4a949;
+			color: white;
+		}
+
+	.tab-content {
+		border: 1px solid #d4a949;
+		padding: 16px;
+		background-color: #fffdf8;
+		display: none;
+	}
+
+		.tab-content.active {
+			display: block;
+		}
+</style>
+
+@if (User.IsInRole(SD.Role_Admin))
+{
+	<div class="px-60 py-4 pl-260">
+		<img src="~/images/room/@Model.TenFileAnh" class="rounded" style="width: 100%; height: 300px;">
+		<div style="border: 1px solid #cd9a2b; padding: 0px 20px;">
+			<div class="d-flex justify-content-between align-items-center">
+				<h4 class="section-title">@Model.TenPhong</h4>
+				<h5 class="text-danger fw-bold">@String.Format("{0:N0}VNĐ/Đêm", Model.GiaMoiDem)</h5>
+			</div>
+			<p class="text-muted">
+				<i class="bi bi-people-fill"></i> @Model.SoNguoiLon Người lớn &nbsp;&nbsp;
+				<i class="bi bi-person-fill"></i> @Model.SoTreEm Trẻ em &nbsp;&nbsp;
+				<i class="bi bi-fullscreen"></i> Phòng @Model.DienTich m²
+			</p>
+			<hr style="border: 1px solid #cd9a2b" />
+			<p>Các phòng trang nhã và dãy phòng trang nghiêm của chúng tôi gợi nhớ về một thời đại đã qua. Mỗi tính năng như đường cong, thảm sang trọng, trần nhà cao, phòng tắm lát đá cẩm thạch, thiết bị làm sạch và nhiều không gian đều được bố trí một cách chu đáo để gọi cho riêng bạn. Tông màu nâu phong phú và gỗ sồi tự nhiên tạo nên những khu bảo tồn yên tĩnh và yên tĩnh, được tôn lên một cách tuyệt vời bởi đồ nội thất trang nhã.</p>
+		</div>
+		<div class="border rounded p-3 mt-4 position-relative" style="border-color: #c7901d;">
+			<div class="tab-button">
+				Dịch vụ phòng
+			</div>
+			<div class="d-flex flex-wrap gap-4 mt-4 ps-2">
+				<div><i class="fas fa-mug-hot me-2"></i>Cafe Buổi Sáng</div>
+				<div><i class="fas fa-concierge-bell me-2"></i>Gọi Đồ Ăn Tại Phòng</div>
+				<div><i class="fas fa-bath me-2"></i>Bồn Tắm Hoa Sen</div>
+				<div><i class="fas fa-wifi me-2"></i>Internet Không Dây</div>
+			</div>
+		</div>
+		<div class="mt-3">
+			<button class="tab-button active" onclick="showTab('mota')">Mô tả</button>
+			<button class="tab-button" onclick="showTab('tiennghi')">Tiện nghi</button>
+		</div>
+		<div id="mota" class="tab-content active">
+			<p>@Model.MoTa</p>
+		</div>
+		<div id="tiennghi" class="tab-content">
+			@if (!string.IsNullOrEmpty(Model.TienNghi))
+			{
+				<p>@string.Join(", ", Model.TienNghi.Split(',').Select(i => i.Trim()))</p>
+			}
+			else
+			{
+				<p>Chưa có thông tin tiện nghi.</p>
+			}
+		</div>
+		<a asp-action="Index" class="btn mt-3 btn-secondary">Quay lại</a>
+	</div>
+}
+else
+{
+	<div class="px-60 mt-115 py-4">
+		<div class="row">
+			<div class="col-md-8">
+				<img src="~/images/room/@Model.TenFileAnh" class="img-fluid-detail rounded">
+				<div style="border: 1px solid #cd9a2b; padding: 0px 20px;">
+					<h4 class="section-title">@Model.TenPhong</h4>
+					<p class="text-muted">
+						<i class="bi bi-people-fill"></i> @Model.SoNguoiLon Người lớn &nbsp;&nbsp;
+						<i class="bi bi-person-fill"></i> @Model.SoTreEm Trẻ em &nbsp;&nbsp;
+						<i class="bi bi-fullscreen"></i> Phòng @Model.DienTich m²
+					</p>
+					<hr style="border: 1px solid #cd9a2b" />
+					<p>Các phòng trang nhã và dãy phòng trang nghiêm của chúng tôi gợi nhớ về một thời đại đã qua. Mỗi tính năng như đường cong, thảm sang trọng, trần nhà cao, phòng tắm lát đá cẩm thạch, thiết bị làm sạch và nhiều không gian đều được bố trí một cách chu đáo để gọi cho riêng bạn. Tông màu nâu phong phú và gỗ sồi tự nhiên tạo nên những khu bảo tồn yên tĩnh và yên tĩnh, được tôn lên một cách tuyệt vời bởi đồ nội thất trang nhã.</p>
+				</div>
+				<div class="border rounded p-3 mt-4 position-relative" style="border-color: #c7901d;">
+					<div class="tab-button">
+						Dịch vụ phòng
+					</div>
+					<div class="d-flex flex-wrap gap-4 mt-4 ps-2">
+						<div><i class="fas fa-mug-hot me-2"></i>Cafe Buổi Sáng</div>
+						<div><i class="fas fa-concierge-bell me-2"></i>Gọi Đồ Ăn Tại Phòng</div>
+						<div><i class="fas fa-bath me-2"></i>Bồn Tắm Hoa Sen</div>
+						<div><i class="fas fa-wifi me-2"></i>Internet Không Dây</div>
+					</div>
+				</div>
+				<div class="mt-3">
+					<button class="tab-button active" onclick="showTab('mota')">Mô tả</button>
+					<button class="tab-button" onclick="showTab('tiennghi')">Tiện nghi</button>
+				</div>
+				<div id="mota" class="tab-content active">
+					<p>@Model.MoTa</p>
+				</div>
+				<div id="tiennghi" class="tab-content">
+					@if (!string.IsNullOrEmpty(Model.TienNghi))
+					{
+						<p>@string.Join(", ", Model.TienNghi.Split(',').Select(i => i.Trim()))</p>
+					}
+					else
+					{
+						<p>Chưa có thông tin tiện nghi.</p>
+					}
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="p-3 rounded gold-border shadow-sm">
+					<h5 class="text-danger fw-bold">@String.Format("{0:N0}đ/Đêm", Model.GiaMoiDem)</h5>
+					<form asp-controller="Payment" asp-action="AddToCart" method="post">
+						<input type="hidden" name="ChiTietPhongId" value="@Model.Id" />
+
+						<div class="mb-2">
+							<label class="form-label">Họ và tên</label>
+							<input type="text" class="form-control border-light-yellow" name="HoTen" required>
+						</div>
+
+						<div class="mb-2">
+							<label class="form-label">Số điện thoại</label>
+							<input type="text" class="form-control border-light-yellow" name="SoDienThoai" required>
+						</div>
+
+						<div class="mb-2">
+							<label class="form-label">Ngày nhận</label>
+							<input type="date" class="form-control border-light-yellow" id="checkin" name="NgayNhan" required>
+						</div>
+
+						<div class="mb-2">
+							<label class="form-label">Ngày trả</label>
+							<input type="date" class="form-control border-light-yellow" id="checkout" name="NgayTra" required>
+						</div>
+
+						<div class="mb-2">
+							<label class="form-label">Người lớn</label>
+							<input type="number" class="form-control border-light-yellow" name="NguoiLon" value="1" min="1" required>
+						</div>
+
+						<div class="mb-2">
+							<label class="form-label">Trẻ em</label>
+							<input type="number" class="form-control border-light-yellow" name="TreEm" value="0" min="0" required>
+						</div>
+
+						<div class="mb-2 mt-3 border-top pt-2">
+							<div class="d-flex justify-content-between">
+								<span>Giá niêm yết ( <span id="night-count">1</span> x @String.Format("{0:N0}đ", Model.GiaMoiDem))</span>
+								<span><strong id="subtotal">@String.Format("{0:N0}đ", Model.GiaMoiDem)</strong></span>
+							</div>
+							<div class="d-flex justify-content-between">
+								<span><strong>Tổng tiền</strong></span>
+								<span><strong id="total">@String.Format("{0:N0}đ", Model.GiaMoiDem)</strong></span>
+							</div>
+						</div>
+						<input type="hidden" id="totalPrice" name="TongTien" value="@Model.GiaMoiDem" />
+						<button type="button" class="btn btn-outline-dark w-100 mt-2" onclick="calculatePrice()">TẠM TÍNH</button>
+						@if (User.Identity.IsAuthenticated)
+						{
+							<button type="submit" class="btn gold-btn w-100 mt-2">Thanh Toán</button>
+						}
+						else
+						{
+							<a href="/Identity/Account/Login" class="btn gold-btn w-100 mt-2">Đăng nhập để thanh toán</a>
+						}
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+<script>
+	const pricePerNight = @Model.GiaMoiDem;
+		function calculatePrice() {
+		const checkIn = new Date(document.getElementById("checkin").value);
+		const checkOut = new Date(document.getElementById("checkout").value);
+		const adultCount = parseInt(document.querySelector('input[name="NguoiLon"]').value) || 1;
+		const childCount = parseInt(document.querySelector('input[name="TreEm"]').value) || 0;
+
+		if (!isNaN(checkIn) && !isNaN(checkOut) && checkOut > checkIn) {
+			const diffTime = checkOut - checkIn;
+			const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+			let basePrice = pricePerNight * diffDays;
+			let extraAdult = Math.max(0, adultCount - 2);
+			let extraAdultFee = extraAdult * 100000 * diffDays;
+			let childFee = childCount * 50000 * diffDays;
+			let total = basePrice + extraAdultFee + childFee;
+
+			document.getElementById("night-count").innerText = diffDays;
+			document.getElementById("subtotal").innerText = basePrice.toLocaleString("vi-VN") + "đ";
+			document.getElementById("total").innerText = total.toLocaleString("vi-VN") + "đ";
+			document.getElementById("totalPrice").value = total; // cập nhật giá vào input hidden
+		} else {
+			alert("Ngày nhận và ngày trả không hợp lệ");
+		}
+	}
+
+	function showTab(tabId) {
+		// Ẩn tất cả tab
+		document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+		document.querySelectorAll('.tab-button').forEach(el => el.classList.remove('active'));
+
+		// Hiện tab được chọn
+		document.getElementById(tabId).classList.add('active');
+		event.target.classList.add('active');
+	}
+</script>

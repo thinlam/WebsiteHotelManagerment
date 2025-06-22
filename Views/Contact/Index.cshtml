@@ -1,0 +1,52 @@
+﻿@model IEnumerable<WebsiteHotelManagerment.Models.LienHe>
+@{
+    ViewData["Title"] = "Quản lý Liên Hệ";
+}
+
+<section class="px-60 pl-260">
+    <h4 class="mb-4 fw-bold">Quản lý liên hệ</h4>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    }
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>#</th>
+                <th>Họ và tên</th>
+                <th>Email</th>
+                <th>Nội dung</th>
+                <th>Ngày gửi</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="6" class="text-center text-muted">Không có dữ liệu</td>
+                </tr>
+            }
+            else
+            {
+                int index = 1;
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@index</td>
+                        <td>@item.HoTen</td>
+                        <td>@item.Email</td>
+                        <td>@item.NoiDung</td>
+                        <td>@item.NgayGui.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Sửa</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger" onclick="return confirm('Xác nhận xóa?');">Xóa</a>
+                        </td>
+                    </tr>
+                    index++;
+                }
+            }
+        </tbody>
+    </table>
+</section>

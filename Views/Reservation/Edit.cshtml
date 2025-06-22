@@ -1,0 +1,71 @@
+﻿@model WebsiteHotelManagerment.Models.DatPhong
+@{
+	ViewData["Title"] = "Chỉnh sửa Đặt Phòng";
+}
+
+<div class="pl-260">
+	<h2 class="text-center">@ViewData["Title"]</h2>
+	@if (TempData["SuccessMessage"] != null)
+	{
+		<div class="alert alert-success">
+			@TempData["SuccessMessage"]
+		</div>
+	}
+
+	<form asp-action="Edit" method="post">
+		@Html.AntiForgeryToken()
+		<input type="hidden" asp-for="Id" />
+
+		<div class="form-group">
+			<label asp-for="HoTen">Họ Tên</label>
+			<input asp-for="HoTen" class="form-control" />
+			<span asp-validation-for="HoTen" class="text-danger"></span>
+		</div>
+
+		<div class="form-group">
+			<label asp-for="SoDienThoai">Số Điện Thoại</label>
+			<input asp-for="SoDienThoai" class="form-control" />
+			<span asp-validation-for="SoDienThoai" class="text-danger"></span>
+		</div>
+
+		<div class="form-group">
+			<label asp-for="NgayNhan">Ngày Nhận</label>
+			<input asp-for="NgayNhan" type="date" class="form-control" />
+			<span asp-validation-for="NgayNhan" class="text-danger"></span>
+		</div>
+
+		<div class="form-group">
+			<label asp-for="NgayTra">Ngày Trả</label>
+			<input asp-for="NgayTra" type="date" class="form-control" />
+			<span asp-validation-for="NgayTra" class="text-danger"></span>
+		</div>
+
+		<div class="form-group">
+			<label asp-for="SoNguoiLon">Số Người Lớn</label>
+			<input asp-for="SoNguoiLon" class="form-control" />
+		</div>
+
+		<div class="form-group">
+			<label asp-for="SoTreEm">Số Trẻ Em</label>
+			<input asp-for="SoTreEm" class="form-control" />
+		</div>
+
+		<div class="form-group">
+			<label asp-for="LoaiPhong">Loại Phòng</label>
+			@Html.DropDownListFor(m => m.LoaiPhong, ViewBag.LoaiPhong as SelectList, "--- Chọn loại phòng ---", new { @class = "form-control" })
+			<span asp-validation-for="LoaiPhong" class="text-danger"></span>
+		</div>
+
+		<div class="form-group">
+			<label asp-for="TrangThai">Trạng Thái</label>
+			<select asp-for="TrangThai" class="form-control" asp-items="ViewBag.TrangThai"></select>
+		</div>
+
+		<button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+		<a class="btn btn-secondary" href="@Url.Action("Index")">Huỷ</a>
+	</form>
+</div>
+
+@section Scripts {
+	@await Html.PartialAsync("_ValidationScriptsPartial")
+}

@@ -1,0 +1,62 @@
+﻿@model IEnumerable<WebsiteHotelManagerment.Models.DatPhong>
+@{
+    ViewData["Title"] = "Danh sách đặt phòng";
+}
+
+@functions {
+    public string GetEnumDisplayName(Enum enumValue)
+    {
+        var type = enumValue.GetType();
+        var memberInfo = type.GetMember(enumValue.ToString());
+        if (memberInfo != null && memberInfo.Length > 0)
+        {
+            var attrs = memberInfo[0].GetCustomAttributes(typeof(System.ComponentModel.DataAnnotations.DisplayAttribute), false);
+            if (attrs != null && attrs.Length > 0)
+            {
+                return ((System.ComponentModel.DataAnnotations.DisplayAttribute)attrs[0]).Name;
+            }
+        }
+        return enumValue.ToString();
+    }
+}
+
+<div class="pl-260">
+    <h2>Danh sách đặt phòng</h2>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    }
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Họ tên</th>
+                <th>SĐT</th>
+                <th>Ngày nhận</th>
+                <th>Ngày trả</th>
+                <th>Loại</th>
+                <th>Trạng thái</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.HoTen</td>
+                    <td>@item.SoDienThoai</td>
+                    <td>@item.NgayNhan.ToShortDateString()</td>
+                    <td>@item.NgayTra.ToShortDateString()</td>
+                    <td>@item.LoaiPhong</td>
+                    <td>@GetEnumDisplayName(item.TrangThai)</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Sửa</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>

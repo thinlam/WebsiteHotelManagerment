@@ -1,0 +1,83 @@
+﻿@model WebsiteHotelManagerment.Models.DatPhong
+@{
+    ViewData["Title"] = "Đặt Phòng";
+}
+
+<section class="bread-crumb mt-115">
+    <div class="px-60">
+        <ul class="breadcrumb">
+            <li class="home">
+                <a class="text-black" asp-controller="Home" asp-action="Index" title="Trang chủ" style="text-decoration: none"><span>Trang chủ</span></a>
+                <i class="fa-solid fa-chevron-right"></i>
+            </li>
+            <li><strong><span>Đặt Phòng</span></strong></li>
+        </ul>
+    </div>
+</section>
+
+<section class="px-60 mb-4">
+    <h2>ĐẶT PHÒNG</h2>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+    <div class="booking-container px-60">
+        <div class="left-side">
+            <img src="~/images/banner_booking.png" alt="Phòng nghỉ" />
+            <div class="overlay">
+                Để lại thông tin đặt phòng và chúng tôi sẽ liên hệ bạn sớm nhất có thể. Cảm ơn bạn đã tin tưởng chúng tôi.<br />
+                Bean Hotel trân trọng!
+            </div>
+        </div>
+        <div class="right-side">
+            <form asp-action="Add" method="post">
+                @Html.AntiForgeryToken()
+                <div class="form-group">
+                    <label asp-for="Email">Email</label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label>Họ và tên*</label>
+                    <input asp-for="HoTen" class="form-control" />
+                    <span asp-validation-for="HoTen" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label>Số điện thoại*</label>
+                    <input asp-for="SoDienThoai" class="form-control" />
+                    <span asp-validation-for="SoDienThoai" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label>Ngày nhận phòng*</label>
+                    <input asp-for="NgayNhan" type="date" class="form-control" />
+                    <span asp-validation-for="NgayNhan" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label>Ngày trả phòng*</label>
+                    <input asp-for="NgayTra" type="date" class="form-control" />
+                    <span asp-validation-for="NgayTra" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label>Số người lớn</label>
+                    <input asp-for="SoNguoiLon" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label>Số trẻ em</label>
+                    <input asp-for="SoTreEm" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label>Loại phòng</label>
+                    @Html.DropDownListFor(m => m.LoaiPhong, ViewBag.LoaiPhong as SelectList, "--- Chọn loại phòng ---", new { @class = "form-control" })
+                    <span asp-validation-for="LoaiPhong" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-primary">Đặt phòng</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

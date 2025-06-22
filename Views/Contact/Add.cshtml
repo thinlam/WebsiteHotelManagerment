@@ -1,0 +1,66 @@
+﻿@model WebsiteHotelManagerment.Models.LienHe
+@{
+    ViewData["Title"] = "Liên Hệ";
+}
+
+<section class="bread-crumb mt-115">
+    <div class="px-60">
+        <ul class="breadcrumb">
+            <li class="home">
+                <a class="text-black" asp-controller="Home" asp-action="Index" style="text-decoration: none"><span>Trang chủ</span></a>
+                <i class="fa-solid fa-chevron-right"></i>
+            </li>
+            <li><strong><span>Liên Hệ</span></strong></li>
+        </ul>
+    </div>
+</section>
+
+<section class="px-60 my-5">
+    <div class="row shadow">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+        }
+        <div class="col-md-6 bg-white p-4">
+            <h5>Thông tin liên hệ</h5>
+            <p class="text-muted">Bạn hãy điền nội dung tin nhắn vào form dưới đây và gửi cho chúng tôi.<br>Chúng tôi sẽ trả lời bạn sau khi nhận được.</p>
+
+            <form asp-action="Add" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="mb-3">
+                    <input asp-for="HoTen" class="form-control border-0 border-bottom rounded-0" placeholder="Họ và tên *" />
+                    <span asp-validation-for="HoTen" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <input asp-for="Email" class="form-control border-0 border-bottom rounded-0" placeholder="Email *" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <textarea asp-for="NoiDung" class="form-control border-0 border-bottom rounded-0" rows="3" placeholder="Nội dung *"></textarea>
+                    <span asp-validation-for="NoiDung" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-dark w-100 fw-bold">GỬI LIÊN HỆ</button>
+            </form>
+        </div>
+
+        <div class="col-md-6 text-white p-4" style="background-color: #000; position: relative;">
+            <div style="position: absolute; top: 0; left: -10px; width: 20px; height: 20px; background-color: #cc9a29;"></div>
+            <div style="position: absolute; top: 0; right: 0; width: 100%; height: 20px; background-color: #cc9a29;"></div>
+            <h5 class="fw-bold">Thông tin</h5>
+            <p><i class="bi bi-geo-alt-fill me-2"></i>70 Lữ Gia, Phường 15, Quận 11, TP.HCM</p>
+            <p><i class="bi bi-telephone-fill me-2"></i>1900 6750</p>
+            <p><i class="bi bi-envelope-fill me-2"></i>support@sapo.vn</p>
+            <p><i class="bi bi-clock-fill me-2"></i>Mở cửa 24/24</p>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

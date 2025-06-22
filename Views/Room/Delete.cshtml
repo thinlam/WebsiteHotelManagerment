@@ -1,0 +1,12 @@
+﻿@model WebsiteHotelManagerment.Models.ChiTietPhong
+
+<div class="pl-260">
+	<h3>Bạn có chắc chắn muốn xoá phòng "@Model.TenPhong"?</h3>
+	<img src="~/images/room/@Model.TenFileAnh" width="200" />
+
+	<form asp-action="DeleteConfirmed" method="post" class="mt-2">
+		<input type="hidden" asp-for="Id" />
+		<button type="submit" class="btn btn-danger">Xoá</button>
+		<a href="@Url.Action("Index", "Room")" class="btn btn-secondary">Hủy</a>
+	</form>
+</div>

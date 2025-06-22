@@ -1,0 +1,85 @@
+﻿@model IEnumerable<WebsiteHotelManagerment.Models.Review>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+
+@{
+    ViewData["Title"] = "Danh sách đánh giá";
+}
+
+<div class="pl-260">
+    <h2 class="text-center mb-4">Đánh giá của khách hàng</h2>
+
+    @foreach (var item in Model)
+    {
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <div class="row g-3">
+                    <!-- Hình ảnh -->
+                    <div class="col-md-3">
+                        @if (!string.IsNullOrEmpty(item.ImagePath))
+                        {
+                            <img src="@Url.Content(item.ImagePath)" class="img-fluid review-img border" />
+                        }
+                        else
+                        {
+                            <div class="text-muted">[Không có ảnh]</div>
+                        }
+                    </div>
+
+                    <div class="col-md-9">
+                        <h5 class="text-warning">⭐ @item.Rating / 5</h5>
+                        <p><strong>Loại đánh giá:</strong> @item.ReviewType</p>
+                        <p>@item.Content</p>
+                        <p class="text-muted">
+                            Gửi bởi: <b>@(item.User?.FullName ?? "Khách")</b>
+                            vào @item.CreatedAt.ToString("dd/MM/yyyy")
+                        </p>
+
+                        @if (!string.IsNullOrEmpty(item.AdminReply))
+                        {
+                            <div class="alert alert-info mt-2">
+                                <strong>Phản hồi từ quản trị:</strong><br />
+                                @item.AdminReply
+                            </div>
+
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <form asp-action="Reply" asp-route-id="@item.Id" method="post" class="mt-2">
+                                    <div class="input-group">
+                                        <input type="text" name="reply" value="@item.AdminReply" class="form-control" />
+                                        <button type="submit" class="btn btn-warning">Cập nhật phản hồi</button>
+                                    </div>
+                                </form>
+                            }
+                        }
+                        else if (User.IsInRole("Admin") && item.Rating < 4)
+                        {
+                            <!-- Cho phép phản hồi thủ công nếu điểm thấp -->
+                            <form asp-action="Reply" asp-route-id="@item.Id" method="post" class="mt-2">
+                                <div class="input-group">
+                                    <input type="text" name="reply" class="form-control" placeholder="Nhập phản hồi..." required />
+                                    <button type="submit" class="btn btn-primary">Gửi phản hồi</button>
+                                </div>
+                            </form>
+                        }
+                        else if (item.Rating >= 4)
+                        {
+                            <div class="alert alert-success mt-2">
+                                <strong>Phản hồi tự động:</strong> Cảm ơn bạn đã đánh giá tích cực! Chúng tôi rất vui vì bạn hài lòng!
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    .review-img {
+        max-height: 300px;
+        width: 100%;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+</style>
