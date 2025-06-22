@@ -230,5 +230,21 @@ namespace WebsiteHotelManagerment.Controllers
 
             return RedirectToAction("Index");
         }
+
+        // 2. Xem ảnh thực tế của phòng
+        public ActionResult RoomImages(int id)
+        {
+            var room = db.Rooms.Include("Images").FirstOrDefault(r => r.Id == id);
+            return View(room);
+        }
+
+        // 3. Xem chi tiết dịch vụ từng phòng
+        public ActionResult Details(int id)
+        {
+            var room = db.Rooms.Find(id);
+            return View(room);
+        }
+
     }
+}
 }

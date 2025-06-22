@@ -99,6 +99,38 @@ namespace WebsiteHotelManagerment.Controllers
             HttpContext.Session.Remove(CartSessionKey);
 
             return View("CheckoutSuccess");
+
+            // 4. Chọn phương thức thanh toán
+        public ActionResult SelectPayment(int bookingId)
+        {
+            var booking = db.Reservations.Find(bookingId);
+            return View(booking);
         }
-    }
+
+        [HttpPost]
+        public ActionResult SelectPayment(int bookingId, string paymentMethod)
+        {
+            var booking = db.Reservations.Find(bookingId);
+            booking.PaymentMethod = paymentMethod;
+            db.SaveChanges();
+            return RedirectToAction("Confirm", new { id = bookingId });
+        }
+
+        // 10. Gửi hóa đơn điện tử qua email
+        public ActionResult SendInvoice(int bookingId)
+        {
+            var booking = db.Reservations.Find(bookingId);
+            if (booking == null) return HttpNotFound();
+
+            var mail = new MailMessage("noreply@hotel.com", booking.User.Email)
+            {
+                Subject = "Hóa đơn điện tử",
+                Body = $"Chi tiết hóa đơn đặt phòng: {booking.RoomName} từ {booking.CheckInDate} đến {booking.CheckOutDate}. Tổng: {booking.TotalPrice} VNĐ"
+            };
+            new SmtpClient().Send(mail);
+
+            return RedirectToAction("Details", new { id = bookingId });
+        }
+     }
+   }
 }

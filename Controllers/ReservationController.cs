@@ -9,6 +9,8 @@ using System.Reflection;
 using System.Threading.Tasks;
 using WebsiteRestaurant.Repositories;
 using Microsoft.AspNetCore.Authorization;
+using System.Net.Mail;
+using System.Web.Mvc;
 
 namespace WebsiteHotelManagerment.Controllers
 {
@@ -190,5 +192,69 @@ namespace WebsiteHotelManagerment.Controllers
                         Text = GetEnumDisplayName(lp)
                     }), "Value", "Text", selectedLoaiPhong?.ToString());
         }
+        // 1. Check-in online
+        [HttpPost]
+        public ActionResult CheckInOnline(string bookingCode)
+        {
+            var booking = db.Reservations.FirstOrDefault(r => r.Code == bookingCode && !r.IsCheckedIn);
+            if (booking == null) return View("Error");
+
+            booking.IsCheckedIn = true;
+            db.SaveChanges();
+            return RedirectToAction("CheckInSuccess");
+        }
+
+        [HttpPost]
+        public ActionResult ShareViaEmail(int id, string toEmail)
+        {
+            var booking = db.Reservations.Find(id);
+            if (booking == null) return HttpNotFound();
+
+            var body = $"Thông tin đặt phòng: {booking.RoomName}, từ {booking.CheckInDate}";
+            var mail = new MailMessage("noreply@hotel.com", toEmail)
+            {
+                Subject = "Chia sẻ đặt phòng",
+                Body = body
+            };
+            new SmtpClient().Send(mail);
+
+            return RedirectToAction("Details", new { id = booking.Id });
+        }
+
+        public void SendReminder()
+        {
+            var tomorrow = DateTime.Now.AddDays(1).Date;
+            var bookings = db.Reservations.Where(b => b.CheckInDate == tomorrow);
+            foreach (var b in bookings)
+            {
+                var mail = new MailMessage("noreply@hotel.com", b.User.Email)
+                {
+                    Subject = "Nhắc nhở nhận phòng",
+                    Body = $"Bạn có lịch nhận phòng vào ngày mai: {b.CheckInDate.ToShortDateString()}"
+                };
+                new SmtpClient().Send(mail);
+            }
+        }
+
+        // 9. Đặt nhiều phòng cùng lúc
+        [HttpPost]
+        public ActionResult CreateMultiple(List<int> roomIds, DateTime checkIn, DateTime checkOut)
+        {
+            foreach (var roomId in roomIds)
+            {
+                var reservation = new Reservation
+                {
+                    RoomId = roomId,
+                    CheckInDate = checkIn,
+                    CheckOutDate = checkOut,
+                    UserId = User.Identity.Name
+                };
+                db.Reservations.Add(reservation);
+            }
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
     }
+
+}
 }

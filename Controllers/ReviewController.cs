@@ -159,5 +159,20 @@ namespace WebsiteHotelManagerment.Controllers
 
             return RedirectToAction("Index");
         }
+
+        // 8. Phản hồi ý kiến ẩn danh
+        [HttpPost]
+        public ActionResult CreateAnonymous(string content)
+        {
+            var feedback = new Feedback
+            {
+                Content = content,
+                DatePosted = DateTime.Now
+            };
+            db.Feedbacks.Add(feedback);
+            db.SaveChanges();
+            return RedirectToAction("Thanks");
+           }
+        }
     }
 }
