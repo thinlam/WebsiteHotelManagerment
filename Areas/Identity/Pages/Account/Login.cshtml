@@ -2,12 +2,12 @@
 @model LoginModel
 
 @{
-    ViewData["Title"] = "Log in";
+    ViewData["Title"] = "Đăng nhập";
 }
 
 <div class="d-flex justify-content-center pb-4 mt-115">
     <div class="login-container pt-5">
-        <h2 class="text-center font-bold">Đăng Nhập</h2>
+        <h2 class="text-center font-bold mb-4">Đăng Nhập</h2>
 
         <form id="account" method="post" style="width: 500px;">
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
@@ -19,81 +19,49 @@
             </div>
 
             <div class="form-floating mb-3">
-                <input asp-for="Input.Password" type="password" class="form-control" placeholder="Password" autocomplete="current-password" />
+                <input asp-for="Input.Password" type="password" class="form-control" placeholder="Mật khẩu" autocomplete="current-password" />
                 <label asp-for="Input.Password">Mật khẩu</label>
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
 
-            <div class="checkbox mb-3">
-                <label>
-                    <input class="form-check-input" asp-for="Input.RememberMe" />
+            <div class="form-check mb-3">
+                <input class="form-check-input" asp-for="Input.RememberMe" />
+                <label class="form-check-label" asp-for="Input.RememberMe">
                     @Html.DisplayNameFor(m => m.Input.RememberMe)
                 </label>
             </div>
 
             <button type="submit" class="w-100 btn btn-lg btn-secondary">Đăng nhập</button>
-
-            <!-- Bắt đầu: Đăng nhập bằng Google / Facebook -->
-            @if ((Model.ExternalLogins?.Count ?? 0) > 0)
-    {
-            <div class="mt-4">
-                <div class="text-center mb-2">Hoặc đăng nhập với</div>
-                <div class="d-flex justify-content-center gap-2">
-                    @foreach (var provider in Model.ExternalLogins)
-                {
-                    <form asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="d-inline">
-                        <button type="submit" name="provider" value="@provider.Name" class="btn btn-outline-primary">
-                            @if (provider.DisplayName == "Google")
-                            {
-                            <i class="fab fa-google"></i> Google
-                            }
-                            else if (provider.DisplayName == "Facebook")
-                            {
-                            <i class="fab fa-facebook-f"></i> Facebook
-                            }
-                            else
-                            {
-                            @provider.DisplayName
-                            }
-                        </button>
-                    </form>
-                }
-                </div>
-            </div>
-    }
-            <!-- Kết thúc: External Logins -->
-
-            <div class="auth-links mt-4 text-center">
-                <p><a asp-page="./ForgotPassword">Quên mật khẩu?</a></p>
-                <p><a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Tạo tài khoản mới</a></p>
-            </div>
         </form>
 
-        <div class="form-floating mb-3">
-            <input asp-for="Input.Email" class="form-control" placeholder="Email" autocomplete="username" />
-            <label asp-for="Input.Email">Email</label>
-            <span asp-validation-for="Input.Email" class="text-danger"></span>
-        </div>
+        <!-- External Login -->
+        @foreach (var provider in Model.ExternalLogins)
+        {
+            <form asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="d-inline">
+                <button type="submit" name="provider" value="@provider.Name" class="btn btn-outline-primary">
+                    @if (provider.DisplayName == "Google")
+                    {
+                        <span><i class="fab fa-google me-1"></i> Google</span>
+                    }
+                    else if (provider.DisplayName == "Facebook")
+                    {
+                        <span><i class="fab fa-facebook-f me-1"></i> Facebook</span>
+                    }
+                    else
+                    {
+                        <span>@provider.DisplayName</span>
+                    }
+                </button>
+            </form>
+        }
+                </div>
+            </div>
+        }
 
-        <div class="form-floating mb-3">
-            <input asp-for="Input.Password" type="password" class="form-control" placeholder="Password" autocomplete="current-password" />
-            <label asp-for="Input.Password">Mật khẩu</label>
-            <span asp-validation-for="Input.Password" class="text-danger"></span>
-        </div>
-
-        <div class="checkbox mb-3">
-            <label>
-                <input class="form-check-input" asp-for="Input.RememberMe" />
-                @Html.DisplayNameFor(m => m.Input.RememberMe)
-            </label>
-        </div>
-
-        <button type="submit" class="w-100 btn btn-lg btn-secondary">Đăng nhập</button>
-
+        <!-- Links -->
         <div class="auth-links mt-4 text-center">
             <p><a asp-page="./ForgotPassword">Quên mật khẩu?</a></p>
             <p><a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Tạo tài khoản mới</a></p>
         </div>
-        </form>
     </div>
 </div>

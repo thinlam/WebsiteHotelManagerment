@@ -19,6 +19,8 @@ namespace WebsiteHotelManagerment.Models
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<WorkShift> WorkShifts { get; set; }
+        public DbSet<NhanVien> NhanViens { get; set; }
+        public DbSet<KhuyenMai> KhuyenMais { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

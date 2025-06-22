@@ -5,71 +5,61 @@
 }
 
 <div class="pl-260">
-    <h3 class="my-3 text-center">Thống kê thanh toán</h3>
+    <h3 class="my-4 text-center fw-bold text-uppercase">Thống kê thanh toán</h3>
 
-    <form method="get" asp-controller="Report" asp-action="PaymentStats" class="mb-3">
-        <label>Chọn loại thống kê:</label>
-        <select name="type" asp-items="ViewBag.TypeList" onchange="this.form.submit()" class="form-select w-auto d-inline-block mx-2"></select>
+    <form method="get" asp-controller="Report" asp-action="PaymentStats" class="mb-4 text-center">
+        <label class="fw-semibold">Loại thống kê:</label>
+        <select name="type" asp-items="ViewBag.TypeList" onchange="this.form.submit()" class="form-select w-auto d-inline-block mx-2">
+            <option disabled selected>Chọn loại</option>
+        </select>
     </form>
 
-    <canvas id="chart" width="1000" height="400"></canvas>
+    <div class="card shadow-sm p-4 mb-5">
+        <canvas id="chart" height="100"></canvas>
+    </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<script>
-    const ctx = document.getElementById('chart').getContext('2d');
-    const chart = new Chart(ctx, {
-        type: 'bar', // ← đổi từ 'line' sang 'bar'
-        data: {
-            labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(labels)),
-            datasets: [{
-                label: 'Tổng tiền (VNĐ)',
-                data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(totals)),
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 159, 64, 0.2)',
-                    'rgba(255, 205, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(201, 203, 207, 0.2)'
-                ],
-                borderColor: [
-                    'rgb(255, 99, 132)',
-                    'rgb(255, 159, 64)',
-                    'rgb(255, 205, 86)',
-                    'rgb(75, 192, 192)',
-                    'rgb(54, 162, 235)',
-                    'rgb(153, 102, 255)',
-                    'rgb(201, 203, 207)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { position: 'top' },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            let value = context.raw;
-                            return value.toLocaleString('vi-VN') + ' đ';
+    <script>
+        const ctx = document.getElementById('chart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(labels)),
+                datasets: [{
+                    label: 'Tổng tiền (VNĐ)',
+                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(totals)),
+                    backgroundColor: 'rgba(13, 110, 253, 0.6)',
+                    borderColor: 'rgba(13, 110, 253, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: true, position: 'top' },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let value = context.raw;
+                                return value.toLocaleString('vi-VN') + ' đ';
+                            }
                         }
                     }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        callback: function(value) {
-                            return value.toLocaleString('vi-VN') + ' đ';
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return value.toLocaleString('vi-VN') + ' đ';
+                            }
                         }
                     }
                 }
             }
-        }
-    });
-</script>
+        });
+    </script>
+}

@@ -1,0 +1,37 @@
+﻿@model IEnumerable<WebsiteHotelManagerment.Models.KhuyenMai>
+@{
+    ViewData["Title"] = "Danh sách khuyến mãi lễ/tết";
+}
+
+<h2 class="text-center mb-4">Danh sách khuyến mãi</h2>
+
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Tên khuyến mãi</th>
+            <th>Mô tả</th>
+            <th>Thời gian áp dụng</th>
+            <th>Phần trăm giảm</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.TieuDe</td>
+                    <td>@item.MoTa</td>
+                    <td>@item.NgayBatDau.ToString("dd/MM/yyyy") - @item.NgayKetThuc.ToString("dd/MM/yyyy")</td>
+                    <td>@item.PhanTramGiam %</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4" class="text-center text-muted">Không có khuyến mãi nào</td>
+            </tr>
+        }
+    </tbody>
+</table>

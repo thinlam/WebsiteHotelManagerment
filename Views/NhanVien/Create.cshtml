@@ -1,0 +1,36 @@
+﻿@model WebsiteHotelManagerment.Models.NhanVien
+@{
+    ViewData["Title"] = "Thêm nhân viên";
+}
+
+<h2 class="mb-4">Thêm nhân viên mới</h2>
+
+<form asp-action="Create" method="post" class="w-50">
+    <div class="mb-3">
+        <label asp-for="HoTen" class="form-label">Họ tên</label>
+        <input asp-for="HoTen" class="form-control" />
+        <span asp-validation-for="HoTen" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label">Email</label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="SoDienThoai" class="form-label">Số điện thoại</label>
+        <input asp-for="SoDienThoai" class="form-control" />
+        <span asp-validation-for="SoDienThoai" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="ChucVu" class="form-label">Chức vụ</label>
+        <input asp-for="ChucVu" class="form-control" />
+        <span asp-validation-for="ChucVu" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="NgayVaoLam" class="form-label">Ngày vào làm</label>
+        <input asp-for="NgayVaoLam" type="date" class="form-control" />
+        <span asp-validation-for="NgayVaoLam" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-success">Thêm mới</button>
+    <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+</form>
