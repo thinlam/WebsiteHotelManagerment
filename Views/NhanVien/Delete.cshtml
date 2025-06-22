@@ -1,0 +1,24 @@
+﻿@model WebsiteHotelManagerment.Models.NhanVien
+@{
+    ViewData["Title"] = "Xóa nhân viên";
+}
+
+<h2 class="mb-4 text-danger">Xác nhận xóa nhân viên</h2>
+
+<div class="alert alert-warning">
+    <p>Bạn có chắc chắn muốn xóa nhân viên sau không?</p>
+</div>
+
+<div class="mb-3">
+    <strong>Họ tên:</strong> @Model.HoTen <br />
+    <strong>Email:</strong> @Model.Email <br />
+    <strong>Số điện thoại:</strong> @Model.SoDienThoai <br />
+    <strong>Chức vụ:</strong> @Model.ChucVu <br />
+    <strong>Ngày vào làm:</strong> @Model.NgayVaoLam.ToString("dd/MM/yyyy")
+</div>
+
+<form asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Xóa</button>
+    <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+</form>

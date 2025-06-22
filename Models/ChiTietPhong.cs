@@ -27,5 +27,8 @@ namespace WebsiteHotelManagerment.Models
         [Required(ErrorMessage = "Phân loại phòng không được để trống")]
         public LoaiPhong? PhanLoai { get; set; }
         public ICollection<ThanhToan>? ThanhToans { get; set; }
+        public virtual ICollection<DatPhong> DatPhongs { get; set; } = new List<DatPhong>();
+        public virtual ICollection<DichVu> DichVus { get; set; } = new List<DichVu>();
+
     }
 }

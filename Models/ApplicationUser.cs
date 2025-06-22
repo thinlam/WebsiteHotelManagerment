@@ -10,6 +10,6 @@ namespace WebsiteHotelManagerment.Models
         public DateTime? DateOfBirth { get; set; }
         public string? Gender { get; set; }
         public string? AvatarUrl { get; set; }
-        public string LastLoginIP { get; set; } // phục vụ chức năng cảnh báo đăng nhập lạ
+        public string? LastLoginIP { get; set; } // Cho phép null để tránh lỗi khi chưa có dữ liệu
     }
 }

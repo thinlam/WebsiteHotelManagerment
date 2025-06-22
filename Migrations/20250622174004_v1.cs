@@ -37,6 +37,7 @@ namespace WebsiteHotelManagerment.Migrations
                     DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AvatarUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastLoginIP = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -58,21 +59,6 @@ namespace WebsiteHotelManagerment.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DichVus",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TenDichVu = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MoTa = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Gia = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DichVus", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "LienHes",
                 columns: table => new
                 {
@@ -89,6 +75,23 @@ namespace WebsiteHotelManagerment.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "NhanViens",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    HoTen = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SoDienThoai = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ChucVu = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NgayVaoLam = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NhanViens", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Phongs",
                 columns: table => new
                 {
@@ -100,6 +103,21 @@ namespace WebsiteHotelManagerment.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Phongs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WorkShifts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EmployeeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ShiftDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ShiftTime = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WorkShifts", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -291,6 +309,27 @@ namespace WebsiteHotelManagerment.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DichVus",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TenDichVu = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MoTa = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Gia = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ChiTietPhongId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DichVus", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DichVus_ChiTietPhongs_ChiTietPhongId",
+                        column: x => x.ChiTietPhongId,
+                        principalTable: "ChiTietPhongs",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
                 {
@@ -418,16 +457,16 @@ namespace WebsiteHotelManagerment.Migrations
                 columns: new[] { "Id", "Email", "HoTen", "NgayGui", "NoiDung" },
                 values: new object[,]
                 {
-                    { 1, "a@gmail.com", "Nguyễn Văn A", new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8375), "Tôi cần hỗ trợ đặt phòng." },
-                    { 2, "b@gmail.com", "Trần Thị B", new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8377), "Khách sạn có hồ bơi không?" },
-                    { 3, "c@gmail.com", "Lê Văn C", new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8378), "Phòng đơn giá bao nhiêu?" },
-                    { 4, "d@gmail.com", "Phạm Thị D", new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8380), "Check-in lúc mấy giờ?" },
-                    { 5, "e@gmail.com", "Đỗ Văn E", new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8382), "Tôi muốn đổi lịch nhận phòng." },
-                    { 6, "f@gmail.com", "Bùi Thị F", new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8383), "Có phục vụ ăn sáng không?" },
-                    { 7, "g@gmail.com", "Ngô Văn G", new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8385), "Tôi muốn huỷ phòng đã đặt." },
-                    { 8, "h@gmail.com", "Võ Thị H", new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8387), "Khách sạn có chỗ đậu xe không?" },
-                    { 9, "i@gmail.com", "Lý Văn I", new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8388), "Tôi bị mất mật khẩu đặt phòng." },
-                    { 10, "k@gmail.com", "Trịnh Thị K", new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8390), "Khách sạn có dịch vụ spa không?" }
+                    { 1, "a@gmail.com", "Nguyễn Văn A", new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1349), "Tôi cần hỗ trợ đặt phòng." },
+                    { 2, "b@gmail.com", "Trần Thị B", new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1351), "Khách sạn có hồ bơi không?" },
+                    { 3, "c@gmail.com", "Lê Văn C", new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1353), "Phòng đơn giá bao nhiêu?" },
+                    { 4, "d@gmail.com", "Phạm Thị D", new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1354), "Check-in lúc mấy giờ?" },
+                    { 5, "e@gmail.com", "Đỗ Văn E", new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1356), "Tôi muốn đổi lịch nhận phòng." },
+                    { 6, "f@gmail.com", "Bùi Thị F", new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1358), "Có phục vụ ăn sáng không?" },
+                    { 7, "g@gmail.com", "Ngô Văn G", new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1359), "Tôi muốn huỷ phòng đã đặt." },
+                    { 8, "h@gmail.com", "Võ Thị H", new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1360), "Khách sạn có chỗ đậu xe không?" },
+                    { 9, "i@gmail.com", "Lý Văn I", new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1362), "Tôi bị mất mật khẩu đặt phòng." },
+                    { 10, "k@gmail.com", "Trịnh Thị K", new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1363), "Khách sạn có dịch vụ spa không?" }
                 });
 
             migrationBuilder.InsertData(
@@ -435,16 +474,16 @@ namespace WebsiteHotelManagerment.Migrations
                 columns: new[] { "Id", "ChiTietPhongId", "Email", "HoTen", "LoaiPhong", "NgayDat", "NgayNhan", "NgayTra", "SoDienThoai", "SoNguoiLon", "SoTreEm", "ThanhToanId", "TrangThai" },
                 values: new object[,]
                 {
-                    { 1, 1, "a@gmail.com", "Nguyễn Văn A", 1, new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8581), new DateTime(2025, 6, 4, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(2025, 6, 6, 0, 0, 0, 0, DateTimeKind.Local), "0901234567", 2, 1, null, 0 },
-                    { 2, 1, "b@gmail.com", "Trần Thị B", 1, new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8590), new DateTime(2025, 6, 5, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(2025, 6, 8, 0, 0, 0, 0, DateTimeKind.Local), "0912345678", 1, 0, null, 1 },
-                    { 3, 1, "c@gmail.com", "Lê Văn C", 1, new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8598), new DateTime(2025, 6, 3, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(2025, 6, 5, 0, 0, 0, 0, DateTimeKind.Local), "0934567890", 2, 2, null, 0 },
-                    { 4, 1, "d@gmail.com", "Phạm Thị D", 0, new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8605), new DateTime(2025, 6, 4, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(2025, 6, 7, 0, 0, 0, 0, DateTimeKind.Local), "0945678901", 3, 0, null, 2 },
-                    { 5, 1, "e@gmail.com", "Đỗ Văn E", 2, new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8612), new DateTime(2025, 6, 5, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(2025, 6, 8, 0, 0, 0, 0, DateTimeKind.Local), "0956789012", 1, 1, null, 0 },
-                    { 6, 1, "f@gmail.com", "Bùi Thị F", 1, new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8619), new DateTime(2025, 6, 6, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(2025, 6, 9, 0, 0, 0, 0, DateTimeKind.Local), "0967890123", 2, 1, null, 1 },
-                    { 7, 1, "g@gmail.com", "Ngô Văn G", 0, new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8627), new DateTime(2025, 6, 7, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(2025, 6, 10, 0, 0, 0, 0, DateTimeKind.Local), "0978901234", 4, 2, null, 0 },
-                    { 8, 1, "h@gmail.com", "Võ Thị H", 2, new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8635), new DateTime(2025, 6, 8, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(2025, 6, 11, 0, 0, 0, 0, DateTimeKind.Local), "0989012345", 2, 0, null, 2 },
-                    { 9, 1, "i@gmail.com", "Lý Văn I", 0, new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8642), new DateTime(2025, 6, 9, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Local), "0990123456", 1, 1, null, 1 },
-                    { 10, 1, "k@gmail.com", "Trịnh Thị K", 1, new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8649), new DateTime(2025, 6, 10, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(2025, 6, 13, 0, 0, 0, 0, DateTimeKind.Local), "0901122334", 3, 1, null, 0 }
+                    { 1, 1, "a@gmail.com", "Nguyễn Văn A", 1, new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1401), new DateTime(2025, 6, 24, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(2025, 6, 26, 0, 0, 0, 0, DateTimeKind.Local), "0901234567", 2, 1, null, 0 },
+                    { 2, 1, "b@gmail.com", "Trần Thị B", 1, new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1405), new DateTime(2025, 6, 25, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(2025, 6, 28, 0, 0, 0, 0, DateTimeKind.Local), "0912345678", 1, 0, null, 1 },
+                    { 3, 1, "c@gmail.com", "Lê Văn C", 1, new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1409), new DateTime(2025, 6, 23, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(2025, 6, 25, 0, 0, 0, 0, DateTimeKind.Local), "0934567890", 2, 2, null, 0 },
+                    { 4, 1, "d@gmail.com", "Phạm Thị D", 0, new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1413), new DateTime(2025, 6, 24, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(2025, 6, 27, 0, 0, 0, 0, DateTimeKind.Local), "0945678901", 3, 0, null, 2 },
+                    { 5, 1, "e@gmail.com", "Đỗ Văn E", 2, new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1416), new DateTime(2025, 6, 25, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(2025, 6, 28, 0, 0, 0, 0, DateTimeKind.Local), "0956789012", 1, 1, null, 0 },
+                    { 6, 1, "f@gmail.com", "Bùi Thị F", 1, new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1420), new DateTime(2025, 6, 26, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(2025, 6, 29, 0, 0, 0, 0, DateTimeKind.Local), "0967890123", 2, 1, null, 1 },
+                    { 7, 1, "g@gmail.com", "Ngô Văn G", 0, new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1423), new DateTime(2025, 6, 27, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(2025, 6, 30, 0, 0, 0, 0, DateTimeKind.Local), "0978901234", 4, 2, null, 0 },
+                    { 8, 1, "h@gmail.com", "Võ Thị H", 2, new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1427), new DateTime(2025, 6, 28, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(2025, 7, 1, 0, 0, 0, 0, DateTimeKind.Local), "0989012345", 2, 0, null, 2 },
+                    { 9, 1, "i@gmail.com", "Lý Văn I", 0, new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1431), new DateTime(2025, 6, 29, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(2025, 7, 2, 0, 0, 0, 0, DateTimeKind.Local), "0990123456", 1, 1, null, 1 },
+                    { 10, 1, "k@gmail.com", "Trịnh Thị K", 1, new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1434), new DateTime(2025, 6, 30, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(2025, 7, 3, 0, 0, 0, 0, DateTimeKind.Local), "0901122334", 3, 1, null, 0 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -500,6 +539,11 @@ namespace WebsiteHotelManagerment.Migrations
                 name: "IX_DatPhongs_ThanhToanId",
                 table: "DatPhongs",
                 column: "ThanhToanId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DichVus_ChiTietPhongId",
+                table: "DichVus",
+                column: "ChiTietPhongId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Messages_ReceiverId",
@@ -558,10 +602,16 @@ namespace WebsiteHotelManagerment.Migrations
                 name: "Messages");
 
             migrationBuilder.DropTable(
+                name: "NhanViens");
+
+            migrationBuilder.DropTable(
                 name: "Orders");
 
             migrationBuilder.DropTable(
                 name: "Reviews");
+
+            migrationBuilder.DropTable(
+                name: "WorkShifts");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

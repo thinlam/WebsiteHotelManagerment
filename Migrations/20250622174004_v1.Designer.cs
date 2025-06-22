@@ -12,7 +12,7 @@ using WebsiteHotelManagerment.Models;
 namespace WebsiteHotelManagerment.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250603093846_v1")]
+    [Migration("20250622174004_v1")]
     partial class v1
     {
         /// <inheritdoc />
@@ -191,6 +191,10 @@ namespace WebsiteHotelManagerment.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Gender")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastLoginIP")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
@@ -775,9 +779,9 @@ namespace WebsiteHotelManagerment.Migrations
                             Email = "a@gmail.com",
                             HoTen = "Nguyễn Văn A",
                             LoaiPhong = 1,
-                            NgayDat = new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8581),
-                            NgayNhan = new DateTime(2025, 6, 4, 0, 0, 0, 0, DateTimeKind.Local),
-                            NgayTra = new DateTime(2025, 6, 6, 0, 0, 0, 0, DateTimeKind.Local),
+                            NgayDat = new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1401),
+                            NgayNhan = new DateTime(2025, 6, 24, 0, 0, 0, 0, DateTimeKind.Local),
+                            NgayTra = new DateTime(2025, 6, 26, 0, 0, 0, 0, DateTimeKind.Local),
                             SoDienThoai = "0901234567",
                             SoNguoiLon = 2,
                             SoTreEm = 1,
@@ -790,9 +794,9 @@ namespace WebsiteHotelManagerment.Migrations
                             Email = "b@gmail.com",
                             HoTen = "Trần Thị B",
                             LoaiPhong = 1,
-                            NgayDat = new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8590),
-                            NgayNhan = new DateTime(2025, 6, 5, 0, 0, 0, 0, DateTimeKind.Local),
-                            NgayTra = new DateTime(2025, 6, 8, 0, 0, 0, 0, DateTimeKind.Local),
+                            NgayDat = new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1405),
+                            NgayNhan = new DateTime(2025, 6, 25, 0, 0, 0, 0, DateTimeKind.Local),
+                            NgayTra = new DateTime(2025, 6, 28, 0, 0, 0, 0, DateTimeKind.Local),
                             SoDienThoai = "0912345678",
                             SoNguoiLon = 1,
                             SoTreEm = 0,
@@ -805,9 +809,9 @@ namespace WebsiteHotelManagerment.Migrations
                             Email = "c@gmail.com",
                             HoTen = "Lê Văn C",
                             LoaiPhong = 1,
-                            NgayDat = new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8598),
-                            NgayNhan = new DateTime(2025, 6, 3, 0, 0, 0, 0, DateTimeKind.Local),
-                            NgayTra = new DateTime(2025, 6, 5, 0, 0, 0, 0, DateTimeKind.Local),
+                            NgayDat = new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1409),
+                            NgayNhan = new DateTime(2025, 6, 23, 0, 0, 0, 0, DateTimeKind.Local),
+                            NgayTra = new DateTime(2025, 6, 25, 0, 0, 0, 0, DateTimeKind.Local),
                             SoDienThoai = "0934567890",
                             SoNguoiLon = 2,
                             SoTreEm = 2,
@@ -820,9 +824,9 @@ namespace WebsiteHotelManagerment.Migrations
                             Email = "d@gmail.com",
                             HoTen = "Phạm Thị D",
                             LoaiPhong = 0,
-                            NgayDat = new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8605),
-                            NgayNhan = new DateTime(2025, 6, 4, 0, 0, 0, 0, DateTimeKind.Local),
-                            NgayTra = new DateTime(2025, 6, 7, 0, 0, 0, 0, DateTimeKind.Local),
+                            NgayDat = new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1413),
+                            NgayNhan = new DateTime(2025, 6, 24, 0, 0, 0, 0, DateTimeKind.Local),
+                            NgayTra = new DateTime(2025, 6, 27, 0, 0, 0, 0, DateTimeKind.Local),
                             SoDienThoai = "0945678901",
                             SoNguoiLon = 3,
                             SoTreEm = 0,
@@ -835,9 +839,9 @@ namespace WebsiteHotelManagerment.Migrations
                             Email = "e@gmail.com",
                             HoTen = "Đỗ Văn E",
                             LoaiPhong = 2,
-                            NgayDat = new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8612),
-                            NgayNhan = new DateTime(2025, 6, 5, 0, 0, 0, 0, DateTimeKind.Local),
-                            NgayTra = new DateTime(2025, 6, 8, 0, 0, 0, 0, DateTimeKind.Local),
+                            NgayDat = new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1416),
+                            NgayNhan = new DateTime(2025, 6, 25, 0, 0, 0, 0, DateTimeKind.Local),
+                            NgayTra = new DateTime(2025, 6, 28, 0, 0, 0, 0, DateTimeKind.Local),
                             SoDienThoai = "0956789012",
                             SoNguoiLon = 1,
                             SoTreEm = 1,
@@ -850,9 +854,9 @@ namespace WebsiteHotelManagerment.Migrations
                             Email = "f@gmail.com",
                             HoTen = "Bùi Thị F",
                             LoaiPhong = 1,
-                            NgayDat = new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8619),
-                            NgayNhan = new DateTime(2025, 6, 6, 0, 0, 0, 0, DateTimeKind.Local),
-                            NgayTra = new DateTime(2025, 6, 9, 0, 0, 0, 0, DateTimeKind.Local),
+                            NgayDat = new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1420),
+                            NgayNhan = new DateTime(2025, 6, 26, 0, 0, 0, 0, DateTimeKind.Local),
+                            NgayTra = new DateTime(2025, 6, 29, 0, 0, 0, 0, DateTimeKind.Local),
                             SoDienThoai = "0967890123",
                             SoNguoiLon = 2,
                             SoTreEm = 1,
@@ -865,9 +869,9 @@ namespace WebsiteHotelManagerment.Migrations
                             Email = "g@gmail.com",
                             HoTen = "Ngô Văn G",
                             LoaiPhong = 0,
-                            NgayDat = new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8627),
-                            NgayNhan = new DateTime(2025, 6, 7, 0, 0, 0, 0, DateTimeKind.Local),
-                            NgayTra = new DateTime(2025, 6, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            NgayDat = new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1423),
+                            NgayNhan = new DateTime(2025, 6, 27, 0, 0, 0, 0, DateTimeKind.Local),
+                            NgayTra = new DateTime(2025, 6, 30, 0, 0, 0, 0, DateTimeKind.Local),
                             SoDienThoai = "0978901234",
                             SoNguoiLon = 4,
                             SoTreEm = 2,
@@ -880,9 +884,9 @@ namespace WebsiteHotelManagerment.Migrations
                             Email = "h@gmail.com",
                             HoTen = "Võ Thị H",
                             LoaiPhong = 2,
-                            NgayDat = new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8635),
-                            NgayNhan = new DateTime(2025, 6, 8, 0, 0, 0, 0, DateTimeKind.Local),
-                            NgayTra = new DateTime(2025, 6, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            NgayDat = new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1427),
+                            NgayNhan = new DateTime(2025, 6, 28, 0, 0, 0, 0, DateTimeKind.Local),
+                            NgayTra = new DateTime(2025, 7, 1, 0, 0, 0, 0, DateTimeKind.Local),
                             SoDienThoai = "0989012345",
                             SoNguoiLon = 2,
                             SoTreEm = 0,
@@ -895,9 +899,9 @@ namespace WebsiteHotelManagerment.Migrations
                             Email = "i@gmail.com",
                             HoTen = "Lý Văn I",
                             LoaiPhong = 0,
-                            NgayDat = new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8642),
-                            NgayNhan = new DateTime(2025, 6, 9, 0, 0, 0, 0, DateTimeKind.Local),
-                            NgayTra = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Local),
+                            NgayDat = new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1431),
+                            NgayNhan = new DateTime(2025, 6, 29, 0, 0, 0, 0, DateTimeKind.Local),
+                            NgayTra = new DateTime(2025, 7, 2, 0, 0, 0, 0, DateTimeKind.Local),
                             SoDienThoai = "0990123456",
                             SoNguoiLon = 1,
                             SoTreEm = 1,
@@ -910,9 +914,9 @@ namespace WebsiteHotelManagerment.Migrations
                             Email = "k@gmail.com",
                             HoTen = "Trịnh Thị K",
                             LoaiPhong = 1,
-                            NgayDat = new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8649),
-                            NgayNhan = new DateTime(2025, 6, 10, 0, 0, 0, 0, DateTimeKind.Local),
-                            NgayTra = new DateTime(2025, 6, 13, 0, 0, 0, 0, DateTimeKind.Local),
+                            NgayDat = new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1434),
+                            NgayNhan = new DateTime(2025, 6, 30, 0, 0, 0, 0, DateTimeKind.Local),
+                            NgayTra = new DateTime(2025, 7, 3, 0, 0, 0, 0, DateTimeKind.Local),
                             SoDienThoai = "0901122334",
                             SoNguoiLon = 3,
                             SoTreEm = 1,
@@ -928,6 +932,9 @@ namespace WebsiteHotelManagerment.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("ChiTietPhongId")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Gia")
                         .HasColumnType("decimal(18,2)");
 
@@ -940,6 +947,8 @@ namespace WebsiteHotelManagerment.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ChiTietPhongId");
 
                     b.ToTable("DichVus");
                 });
@@ -978,7 +987,7 @@ namespace WebsiteHotelManagerment.Migrations
                             Id = 1,
                             Email = "a@gmail.com",
                             HoTen = "Nguyễn Văn A",
-                            NgayGui = new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8375),
+                            NgayGui = new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1349),
                             NoiDung = "Tôi cần hỗ trợ đặt phòng."
                         },
                         new
@@ -986,7 +995,7 @@ namespace WebsiteHotelManagerment.Migrations
                             Id = 2,
                             Email = "b@gmail.com",
                             HoTen = "Trần Thị B",
-                            NgayGui = new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8377),
+                            NgayGui = new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1351),
                             NoiDung = "Khách sạn có hồ bơi không?"
                         },
                         new
@@ -994,7 +1003,7 @@ namespace WebsiteHotelManagerment.Migrations
                             Id = 3,
                             Email = "c@gmail.com",
                             HoTen = "Lê Văn C",
-                            NgayGui = new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8378),
+                            NgayGui = new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1353),
                             NoiDung = "Phòng đơn giá bao nhiêu?"
                         },
                         new
@@ -1002,7 +1011,7 @@ namespace WebsiteHotelManagerment.Migrations
                             Id = 4,
                             Email = "d@gmail.com",
                             HoTen = "Phạm Thị D",
-                            NgayGui = new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8380),
+                            NgayGui = new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1354),
                             NoiDung = "Check-in lúc mấy giờ?"
                         },
                         new
@@ -1010,7 +1019,7 @@ namespace WebsiteHotelManagerment.Migrations
                             Id = 5,
                             Email = "e@gmail.com",
                             HoTen = "Đỗ Văn E",
-                            NgayGui = new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8382),
+                            NgayGui = new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1356),
                             NoiDung = "Tôi muốn đổi lịch nhận phòng."
                         },
                         new
@@ -1018,7 +1027,7 @@ namespace WebsiteHotelManagerment.Migrations
                             Id = 6,
                             Email = "f@gmail.com",
                             HoTen = "Bùi Thị F",
-                            NgayGui = new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8383),
+                            NgayGui = new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1358),
                             NoiDung = "Có phục vụ ăn sáng không?"
                         },
                         new
@@ -1026,7 +1035,7 @@ namespace WebsiteHotelManagerment.Migrations
                             Id = 7,
                             Email = "g@gmail.com",
                             HoTen = "Ngô Văn G",
-                            NgayGui = new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8385),
+                            NgayGui = new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1359),
                             NoiDung = "Tôi muốn huỷ phòng đã đặt."
                         },
                         new
@@ -1034,7 +1043,7 @@ namespace WebsiteHotelManagerment.Migrations
                             Id = 8,
                             Email = "h@gmail.com",
                             HoTen = "Võ Thị H",
-                            NgayGui = new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8387),
+                            NgayGui = new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1360),
                             NoiDung = "Khách sạn có chỗ đậu xe không?"
                         },
                         new
@@ -1042,7 +1051,7 @@ namespace WebsiteHotelManagerment.Migrations
                             Id = 9,
                             Email = "i@gmail.com",
                             HoTen = "Lý Văn I",
-                            NgayGui = new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8388),
+                            NgayGui = new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1362),
                             NoiDung = "Tôi bị mất mật khẩu đặt phòng."
                         },
                         new
@@ -1050,7 +1059,7 @@ namespace WebsiteHotelManagerment.Migrations
                             Id = 10,
                             Email = "k@gmail.com",
                             HoTen = "Trịnh Thị K",
-                            NgayGui = new DateTime(2025, 6, 3, 16, 38, 46, 62, DateTimeKind.Local).AddTicks(8390),
+                            NgayGui = new DateTime(2025, 6, 23, 0, 40, 3, 423, DateTimeKind.Local).AddTicks(1363),
                             NoiDung = "Khách sạn có dịch vụ spa không?"
                         });
                 });
@@ -1088,6 +1097,38 @@ namespace WebsiteHotelManagerment.Migrations
                     b.HasIndex("SenderId");
 
                     b.ToTable("Messages");
+                });
+
+            modelBuilder.Entity("WebsiteHotelManagerment.Models.NhanVien", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ChucVu")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HoTen")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("NgayVaoLam")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SoDienThoai")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NhanViens");
                 });
 
             modelBuilder.Entity("WebsiteHotelManagerment.Models.Order", b =>
@@ -1234,6 +1275,30 @@ namespace WebsiteHotelManagerment.Migrations
                     b.ToTable("ThanhToans");
                 });
 
+            modelBuilder.Entity("WebsiteHotelManagerment.Models.WorkShift", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("EmployeeName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ShiftDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ShiftTime")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("WorkShifts");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -1295,7 +1360,7 @@ namespace WebsiteHotelManagerment.Migrations
             modelBuilder.Entity("WebsiteHotelManagerment.Models.DatPhong", b =>
                 {
                     b.HasOne("WebsiteHotelManagerment.Models.ChiTietPhong", "ChiTietPhong")
-                        .WithMany()
+                        .WithMany("DatPhongs")
                         .HasForeignKey("ChiTietPhongId");
 
                     b.HasOne("WebsiteHotelManagerment.Models.ThanhToan", "ThanhToan")
@@ -1305,6 +1370,13 @@ namespace WebsiteHotelManagerment.Migrations
                     b.Navigation("ChiTietPhong");
 
                     b.Navigation("ThanhToan");
+                });
+
+            modelBuilder.Entity("WebsiteHotelManagerment.Models.DichVu", b =>
+                {
+                    b.HasOne("WebsiteHotelManagerment.Models.ChiTietPhong", null)
+                        .WithMany("DichVus")
+                        .HasForeignKey("ChiTietPhongId");
                 });
 
             modelBuilder.Entity("WebsiteHotelManagerment.Models.Message", b =>
@@ -1361,6 +1433,10 @@ namespace WebsiteHotelManagerment.Migrations
 
             modelBuilder.Entity("WebsiteHotelManagerment.Models.ChiTietPhong", b =>
                 {
+                    b.Navigation("DatPhongs");
+
+                    b.Navigation("DichVus");
+
                     b.Navigation("ThanhToans");
                 });
 
