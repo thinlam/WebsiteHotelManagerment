@@ -1,15 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System.ComponentModel.DataAnnotations;
-using System.Reflection;
-using System.Linq;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using WebsiteHotelManagerment.Models;
 using Microsoft.EntityFrameworkCore;
-using System.IO;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
+using System.Reflection;
+using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System;
 
 namespace WebsiteHotelManagerment.Controllers
 {
@@ -41,34 +41,34 @@ namespace WebsiteHotelManagerment.Controllers
             {
                 var attrs = memInfo[0].GetCustomAttributes(typeof(DisplayAttribute), false);
                 if (attrs.Length > 0)
-                {
                     return ((DisplayAttribute)attrs[0]).Name;
-                }
             }
             return enumValue.ToString();
         }
 
-        // Trang danh sách, filter keyword, loại phòng và mức giá, phân trang
-        public IActionResult Index(string keyword, List<string> roomTypes, List<int> prices, int page = 1)
+        // Trang danh sách, filter keyword, loại phòng, mức giá, ngày đặt
+        public IActionResult Index(string keyword, List<string> roomTypes, List<int> prices, DateTime? ngayDat, int page = 1)
         {
             int pageSize = 12;
-            var query = _context.ChiTietPhongs.AsQueryable();
+            var query = _context.ChiTietPhongs
+                                .Include(p => p.DatPhongs)
+                                .AsQueryable();
 
             if (!string.IsNullOrEmpty(keyword))
-            {
                 query = query.Where(r => r.TenPhong.Contains(keyword));
-            }
+
+            if (roomTypes != null && roomTypes.Count > 0)
+                query = query.Where(r => roomTypes.Contains(r.PhanLoai.ToString()));
+
+            if (prices != null && prices.Count > 0)
+                query = query.Where(r => prices.Any(p => r.GiaMoiDem <= p));
 
             var list = query.ToList();
 
-            if (roomTypes != null && roomTypes.Count > 0)
+            if (ngayDat.HasValue)
             {
-                list = list.Where(r => roomTypes.Contains(r.PhanLoai.ToString())).ToList();
-            }
-
-            if (prices != null && prices.Count > 0)
-            {
-                list = list.Where(r => prices.Any(p => r.GiaMoiDem <= p)).ToList();
+                list = list.Where(p => !p.DatPhongs.Any(dp =>
+                    dp.NgayNhan <= ngayDat.Value && dp.NgayTra >= ngayDat.Value)).ToList();
             }
 
             int totalItems = list.Count;
@@ -77,27 +77,29 @@ namespace WebsiteHotelManagerment.Controllers
 
             var pagedList = list.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
-            // Truyền dữ liệu cho view
             ViewBag.LoaiPhongList = new List<SelectListItem>
-    {
-        new SelectListItem { Text = "Phòng đơn", Value = "Don" },
-        new SelectListItem { Text = "Phòng đôi", Value = "Doi" },
-        new SelectListItem { Text = "Phòng VIP", Value = "Vip" }
-    };
+            {
+                new SelectListItem { Text = "Phòng đơn", Value = "Don" },
+                new SelectListItem { Text = "Phòng đôi", Value = "Doi" },
+                new SelectListItem { Text = "Phòng VIP", Value = "Vip" }
+            };
             ViewBag.SelectedRoomTypes = roomTypes ?? new List<string>();
             ViewBag.SelectedPrices = prices ?? new List<int>();
             ViewBag.Keyword = keyword;
+            ViewBag.NgayDat = ngayDat;
             ViewBag.CurrentPage = page;
             ViewBag.TotalPages = totalPages;
 
             return View(pagedList);
         }
+
         [Authorize(Roles = "Admin")]
         public IActionResult Add()
         {
             ViewBag.LoaiPhongList = GetLoaiPhongSelectList();
             return View();
         }
+
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult Add(ChiTietPhong model, IFormFile fileAnh)
@@ -125,7 +127,7 @@ namespace WebsiteHotelManagerment.Controllers
                 }
                 model.TenFileAnh = fileName;
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 ModelState.AddModelError("", "Lỗi khi lưu ảnh: " + ex.Message);
                 ViewBag.LoaiPhongList = GetLoaiPhongSelectList();
@@ -140,28 +142,32 @@ namespace WebsiteHotelManagerment.Controllers
 
         public IActionResult Detail(int id)
         {
-            var room = _context.ChiTietPhongs.FirstOrDefault(p => p.Id == id);
+            var room = _context.ChiTietPhongs
+                               .Include(p => p.DatPhongs)
+                               .FirstOrDefault(p => p.Id == id);
             if (room == null) return NotFound();
             return View(room);
         }
+
         [Authorize(Roles = "Admin")]
         public IActionResult Edit(int id)
         {
             var room = _context.ChiTietPhongs.FirstOrDefault(p => p.Id == id);
             if (room == null) return NotFound();
+
             ViewBag.LoaiPhongList = GetLoaiPhongSelectList();
             return View(room);
         }
+
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult Edit(ChiTietPhong model, IFormFile fileAnh)
         {
-
             ModelState.Remove("fileAnh");
+
             var existing = _context.ChiTietPhongs.FirstOrDefault(p => p.Id == model.Id);
             if (existing == null) return NotFound();
 
-            // Nếu có lỗi validate (nhưng KHÔNG phải do thiếu ảnh), thì render lại view
             if (!ModelState.IsValid)
             {
                 ViewBag.LoaiPhongList = GetLoaiPhongSelectList();
@@ -179,7 +185,6 @@ namespace WebsiteHotelManagerment.Controllers
             existing.TieuDeAnh = model.TieuDeAnh;
             existing.PhanLoai = model.PhanLoai;
 
-            // Nếu người dùng có chọn ảnh mới thì lưu ảnh
             if (fileAnh != null && fileAnh.Length > 0)
             {
                 var fileName = Path.GetFileName(fileAnh.FileName);
@@ -202,8 +207,10 @@ namespace WebsiteHotelManagerment.Controllers
         {
             var room = _context.ChiTietPhongs.FirstOrDefault(p => p.Id == id);
             if (room == null) return NotFound();
+
             return View(room);
         }
+
         [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("DeleteConfirmed")]
         public IActionResult DeleteConfirmed(int id)
