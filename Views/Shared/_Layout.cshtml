@@ -22,32 +22,36 @@
 					</a>
 					<h6 class="fw-bold mt-2">Bean Hotel</h6>
 				</div>
-				<nav class="nav flex-column px-3">
-					<a class="nav-link text-dark @(Url.ActionContext.RouteData.Values["controller"]?.ToString() == "Home" ? "fw-bold text-primary" : "")" asp-controller="Home" asp-action="Index">
-						<i class="bi bi-house-door-fill me-2"></i> Tổng Quan
-					</a>
-					<a class="nav-link text-dark @(Url.ActionContext.RouteData.Values["controller"]?.ToString() == "Room" ? "fw-bold text-primary" : "")" asp-controller="Room" asp-action="Index">
-						<i class="bi bi-info-circle-fill me-2"></i> Quản Lý Phòng
-					</a>
-					<a class="nav-link text-dark @(Url.ActionContext.RouteData.Values["controller"]?.ToString() == "Reservation" ? "fw-bold text-primary" : "")" asp-controller="Reservation" asp-action="Index">
-						<i class="bi bi-door-open-fill me-2"></i> Quản Lý Đặt Phòng
-					</a>
-					<a class="nav-link text-dark @(Url.ActionContext.RouteData.Values["controller"]?.ToString() == "Contact" ? "fw-bold text-primary" : "")" asp-controller="Contact" asp-action="Index">
-						<i class="bi bi-calendar-check-fill me-2"></i> Quản Lý Liên Hệ
-					</a>
-					<a class="nav-link text-dark @(Url.ActionContext.RouteData.Values["controller"]?.ToString() == "Order" ? "fw-bold text-primary" : "")" asp-controller="Order" asp-action="Index">
-						<i class="bi bi-images me-2"></i> Quản Lý Đơn Hàng
-					</a>
-					<a class="nav-link text-dark @(Url.ActionContext.RouteData.Values["controller"]?.ToString() == "Report" ? "fw-bold text-primary" : "")" asp-controller="Report" asp-action="PaymentStats">
-						<i class="bi bi-cone-striped me-2"></i> Quản Lý Thống Kê
-					</a>
-					<a class="nav-link text-dark @(Url.ActionContext.RouteData.Values["controller"]?.ToString() == "Review" ? "fw-bold text-primary" : "")" asp-controller="Review" asp-action="Index">
-						<i class="bi bi-chat-dots-fill me-2"></i> Quản Lý Đánh Giá
-					</a>
-					<a class="nav-link text-dark @(Url.ActionContext.RouteData.Values["controller"]?.ToString() == "Chat" ? "fw-bold text-primary" : "")" asp-controller="Chat" asp-action="UserChats">
-						<i class="bi bi-chat-text-fill me-2"></i> Chat với khách hàng
-					</a>
-				</nav>
+                <nav class="nav flex-column px-3">
+                    <a class="nav-link text-dark @(Url.ActionContext.RouteData.Values["controller"]?.ToString() == "Home" ? "fw-bold text-primary" : "")" asp-controller="Home" asp-action="Index">
+                        <i class="bi bi-house-door-fill me-2"></i> Tổng Quan
+                    </a>
+                    <a class="nav-link text-dark @(Url.ActionContext.RouteData.Values["controller"]?.ToString() == "Room" ? "fw-bold text-primary" : "")" asp-controller="Room" asp-action="Index">
+                        <i class="bi bi-info-circle-fill me-2"></i> Quản Lý Phòng
+                    </a>
+                    <a class="nav-link text-dark @(Url.ActionContext.RouteData.Values["controller"]?.ToString() == "Reservation" ? "fw-bold text-primary" : "")" asp-controller="Reservation" asp-action="Index">
+                        <i class="bi bi-door-open-fill me-2"></i> Quản Lý Đặt Phòng
+                    </a>
+                    <a class="nav-link text-dark @(Url.ActionContext.RouteData.Values["controller"]?.ToString() == "Contact" ? "fw-bold text-primary" : "")" asp-controller="Contact" asp-action="Index">
+                        <i class="bi bi-calendar-check-fill me-2"></i> Quản Lý Liên Hệ
+                    </a>
+                    <a class="nav-link text-dark @(Url.ActionContext.RouteData.Values["controller"]?.ToString() == "Order" ? "fw-bold text-primary" : "")" asp-controller="Order" asp-action="Index">
+                        <i class="bi bi-images me-2"></i> Quản Lý Đơn Hàng
+                    </a>
+                    <a class="nav-link text-dark @(Url.ActionContext.RouteData.Values["controller"]?.ToString() == "Report" ? "fw-bold text-primary" : "")" asp-controller="Report" asp-action="PaymentStats">
+                        <i class="bi bi-cone-striped me-2"></i> Quản Lý Thống Kê
+                    </a>
+                    <a class="nav-link text-dark @(Url.ActionContext.RouteData.Values["controller"]?.ToString() == "Review" ? "fw-bold text-primary" : "")" asp-controller="Review" asp-action="Index">
+                        <i class="bi bi-chat-dots-fill me-2"></i> Quản Lý Đánh Giá
+                    </a>
+                    <a class="nav-link text-dark @(Url.ActionContext.RouteData.Values["controller"]?.ToString() == "Chat" ? "fw-bold text-primary" : "")" asp-controller="Chat" asp-action="UserChats">
+                        <i class="bi bi-chat-text-fill me-2"></i> Chat với khách hàng
+                    </a>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-page="/Account/Manage/EditProfile">Thông tin cá nhân</a>
+                    </li>
+
+                </nav>
 			</aside>
 			<div class="d-flex justify-content-end" style="position: fixed; top: 0; left: 250px; right: 0; background-color: #FFCC33; height: 70px; padding-right: 20px; z-index: 1100;">
 				<partial name="_LoginPartial"></partial>
@@ -113,9 +117,34 @@
 							</li>
 						</ul>
 					</div>
-					<div class="d-flex justify-content-end">
-						<partial name="_LoginPartial"></partial>
-					</div>
+                    <div class="d-flex justify-content-end">
+                        @inject UserManager<ApplicationUser>
+                            UserManager
+
+                            @if (User.Identity.IsAuthenticated)
+{
+    var user = await UserManager.GetUserAsync(User);
+
+                            <div class="d-flex align-items-center">
+                                @if (!string.IsNullOrEmpty(user?.AvatarUrl))
+        {
+                                <img src="@user.AvatarUrl" class="rounded-circle me-2" alt="Avatar" style="width: 35px; height: 35px; object-fit: cover;" />
+        }
+
+                                <span class="me-3 text-dark fw-bold">@user?.FullName</span>
+
+                                <form method="post" asp-page="/Account/Logout" asp-area="Identity">
+                                    <button type="submit" class="btn btn-link text-danger text-decoration-none">Đăng xuất</button>
+                                </form>
+                            </div>
+}
+else
+{
+                            <a class="btn btn-outline-primary me-2" asp-page="/Account/Login">Đăng nhập</a>
+                            <a class="btn btn-warning" asp-page="/Account/Register">Đăng ký</a>
+}
+
+                    </div>
 				</div>
 			</nav>
 		</header>

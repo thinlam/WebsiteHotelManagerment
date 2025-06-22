@@ -1,0 +1,30 @@
+﻿@page
+@model EditProfileModel
+@{
+    ViewData["Title"] = "Cập nhật thông tin cá nhân";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form method="post" class="w-50 mx-auto">
+    <div class="form-group mb-3">
+        <label asp-for="FullName" class="form-label">Họ và tên</label>
+        <input asp-for="FullName" class="form-control" />
+        <span asp-validation-for="FullName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="AvatarUrl" class="form-label">Link ảnh đại diện</label>
+        <input asp-for="AvatarUrl" class="form-control" />
+        <span asp-validation-for="AvatarUrl" class="text-danger"></span>
+
+        @if (!string.IsNullOrEmpty(Model.AvatarUrl))
+        {
+        <div class="mt-2">
+            <img src="@Model.AvatarUrl" alt="Avatar" style="max-width: 120px;" />
+        </div>
+        }
+    </div>
+
+    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+</form>
