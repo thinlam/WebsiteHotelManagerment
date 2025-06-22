@@ -1,0 +1,23 @@
+﻿@model List<WebsiteHotelManagerment.Models.WorkShift>
+
+<h2>Lịch phân ca trong tuần</h2>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Ngày</th>
+            <th>Tên nhân viên</th>
+            <th>Ca làm</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var shift in Model)
+        {
+            <tr>
+                <td>@shift.ShiftDate.ToString("dddd, dd/MM/yyyy")</td>
+                <td>@shift.EmployeeName</td>
+                <td>@shift.ShiftTime</td>
+            </tr>
+        }
+    </tbody>
+</table>
