@@ -64,5 +64,19 @@ namespace WebsiteHotelManagerment.Controllers.Admin
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
+
+        // 5. Nhận khuyến mãi nếu đặt sớm - xử lý logic trong đặt phòng
+        public decimal ApplyEarlyDiscount(DateTime checkIn, decimal originalPrice)
+        {
+            if ((checkIn - DateTime.Now).TotalDays >= 7)
+            {
+                return originalPrice * 0.9m; // giảm 10%
+            }
+            return originalPrice;
+        }
+
+
     }
+
+}
 }
